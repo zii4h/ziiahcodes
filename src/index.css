@@ -14,23 +14,6 @@ body {
 }
 
 :root {
-  --bg: #ffffff;
-  --bg2: #f8f8f8;
-  --bg3: #f0f0f0;
-  --text: #0f0f0f;
-  --text2: #555;
-  --text3: #888;
-  --border: #e5e5e5;
-  --border2: #d0d0d0;
-  --tag-bg: #111;
-  --tag-text: #fff;
-  --card-bg: #ffffff;
-  --card-border: #e8e8e8;
-  --dock-bg: rgba(255, 255, 255, 0.7);
-  --dock-border: rgba(0, 0, 0, 0.1);
-}
-
-.dark {
   --bg: #141414;
   --bg2: #111; /* work exp icon bg*/
   --bg3: #1a1a1a;
@@ -45,6 +28,23 @@ body {
   --card-border: #2e2e2e; /* discord card border */
   --dock-bg: rgba(20, 20, 20, 0.75);
   --dock-border: rgba(255, 255, 255, 0.123);
+}
+
+.dark {
+  --bg: #ffffff;
+  --bg2: #f8f8f8; /* work exp icon bg*/
+  --bg3: #f0f0f0;
+  --text: #0f0f0f; /* Hi, I'm Ziah */
+  --text2: #555; /* paragraph texts */
+  --text3: #888; /* subtext */
+  --border: #e5e5e5; /* work exp icon border*/
+  --border2: #d0d0d0;
+  --tag-bg: #111; /* skills button */
+  --tag-text: #fff; /* each skills text*/
+  --card-bg: #ffffff; /* discord card */
+  --card-border: #e8e8e8; /* discord card border */
+  --dock-bg: rgba(255, 255, 255, 0.7);
+  --dock-border: rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -68,48 +68,45 @@ a {
 }
 
 .theme-toggle {
-  position: fixed;
+  position: absolute; /* switch: sticky to fixed */
   top: 20px;
-  right: 20px;
+  right: calc((100vw - 680px) / 2); /*to adjust dark/light position toggle*/
   z-index: 100;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid var(--border);
-  display: flex;
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all .2s;
-  backdrop-filter: blur(10px);
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: transform .2s, opacity .2s;
 }
 
 .theme-toggle:hover {
-  opacity: .8;
-  transform: scale(1.05);
-}
-
-.dark .theme-toggle {
-  background: rgba(30, 30, 30, 0.9);
-  border-color: var(--border);
+  opacity: 0.7;
+  transform: scale(1.1);
 }
 
 .theme-toggle svg {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   stroke: var(--text);
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: all .2s;
+  transition: stroke .2s;
+}
+
+.dark .theme-toggle svg {
+  stroke: var(--text);
 }
 
 .page {
   max-width: 700px;
   margin: 0 auto;
   padding: 40px 20px 20px;
+  padding-top: 60px; /* space before the dark/light toggle*/
   text-align: left;
 }
 
