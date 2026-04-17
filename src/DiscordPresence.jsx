@@ -77,7 +77,7 @@ const ActivityCard = ({ activity }) => {
     <div style={{ display: 'flex', gap: 10, alignItems: 'center', width: '100%' }}>
       {largeImg && (
         <div style={{ position: 'relative', flexShrink: 0 }}>
-          <img src={largeImg} alt="" width={42} height={42}
+          <img src={largeImg} alt="" width={62} height={64} /* spotify cover image */
             style={{ borderRadius: 8, display: 'block', objectFit: 'cover' }} />
           {smallImg && (
             <img src={smallImg} alt="" width={18} height={18}
@@ -86,11 +86,21 @@ const ActivityCard = ({ activity }) => {
           )}
         </div>
       )}
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+      {/* ACTIVITY PADDING: 
+
+          Playing Spotify
+          Song Title
+          Song SInger
+          Music Player */}
+
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}> 
+
+        {/* Playing Spotify text */}
         {activity.name && (
-          <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)',
+          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {activity.name}
+            {isSpotify ? `Playing ${activity.name}` : activity.name}
           </div>
         )}
         {activity.details && (
@@ -142,7 +152,7 @@ export default function DiscordPresence() {
     : `https://cdn.discordapp.com/embed/avatars/0.png`
 
   const cardStyle = {
-    width: 200,
+    width: 225,
     flexShrink: 0,
     border: '1px solid var(--card-border)',
     borderRadius: 14,
@@ -185,7 +195,7 @@ export default function DiscordPresence() {
             <StatusDot status={status} />
           </div>
           <div style={{ marginBottom: 4 }}>
-            <img src={discordBadge} alt="badge" width={67} height={20} />
+            <img src={discordBadge} alt="badge" width={82} height={20} />
           </div>
         </div>
 
