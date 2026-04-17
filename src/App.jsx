@@ -1,6 +1,7 @@
 import DiscordPresence from './DiscordPresence.jsx'
 import "./index.css";
 import { useState, useEffect, useRef, useCallback } from "react";
+import Lanyard from './Lanyard';
 
 export default function App() {
   const [dark, setDark] = useState(false);
@@ -446,6 +447,32 @@ const themeIcon = dark ? (
           `).join('');
         }
       }, [activeTab, currentProjects])}
+
+
+
+      <div style={{
+      position: 'fixed',
+      top: 0,
+      right: 0,
+      width: '380px',
+      height: '100vh',
+      pointerEvents: 'none',  
+      zIndex: 9999,
+    }}>
+      <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
+        <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} />
+      </div>
+</div>
+
+<div className="lanyard-fixed" style={{
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  width: '380px',
+  height: '100vh',
+  pointerEvents: 'none',
+  zIndex: 9999,
+}}></div>
     </>
   );
 }
