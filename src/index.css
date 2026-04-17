@@ -13,6 +13,16 @@ body {
   padding: 0;
 }
 
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+::selection {
+  background: #333333;
+  color: white;
+}
+
 :root {
   --bg: #141414;
   --bg2: #111; /* work exp icon bg*/
