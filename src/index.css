@@ -31,20 +31,20 @@ body {
 }
 
 .dark {
-  --bg: #0a0a0a;
-  --bg2: #111;
+  --bg: #141414;
+  --bg2: #111; /* work exp icon bg*/
   --bg3: #1a1a1a;
-  --text: #f0f0f0;
-  --text2: #aaa;
-  --text3: #666;
-  --border: #2a2a2a;
+  --text: #f0f0f0; /* Hi, I'm Ziah */
+  --text2: #aaa; /* paragraph texts */
+  --text3: #666; /* subtext */
+  --border: #2a2a2a; /* work exp icon border*/
   --border2: #333;
-  --tag-bg: #f0f0f0;
-  --tag-text: #111;
-  --card-bg: #111;
-  --card-border: #222;
+  --tag-bg: #f0f0f0; /* skills button */
+  --tag-text: #111; /* each skills text*/
+  --card-bg: #111; /* discord card */
+  --card-border: #2e2e2e; /* discord card border */
   --dock-bg: rgba(20, 20, 20, 0.75);
-  --dock-border: rgba(255, 255, 255, 0.08);
+  --dock-border: rgba(255, 255, 255, 0.123);
 }
 
 body {

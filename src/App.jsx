@@ -1,3 +1,4 @@
+import DiscordPresence from './DiscordPresence.jsx'
 import "./index.css";
 import { useState, useEffect, useRef, useCallback } from "react";
 
@@ -24,11 +25,11 @@ export default function App() {
 
   const devProjects = [
   {name:'Lorem Project One',year:'2025',desc:'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',tech:['React','TypeScript','Tailwind','Vite'],links:['Website','Source'],thumb:'#2a4a7a'},
-  {name:'Lorem Coffee App',year:'2025',desc:'Lorem ipsum dolor sit amet minimal interface for managing digital products and user interactions.',tech:['React','Node','Express','MongoDB'],links:['Website','Source'],thumb:'#3a2a1a'},
-  {name:'Lorem Movie Tracker',year:'2025',desc:'Lorem ipsum movie tracking application with rating and search functionality powered by external APIs.',tech:['React','TypeScript','Vite'],links:['Website','Source'],thumb:'#1a1a2a'},
-  {name:'Lorem Travel Log',year:'2025',desc:'Lorem ipsum travel journaling platform to record locations and visualize user journeys.',tech:['React','React Router','Supabase'],tech:['React','React Router','JavaScript'],links:['Website','Source'],thumb:'#1a3a2a'},
-  {name:'Lorem Todo System',year:'2024–2025',desc:'Lorem ipsum task management system designed to improve productivity and workflow organization.',tech:['React','JavaScript','DaisyUI'],links:['Website','Source'],thumb:'#1a2a3a'},
-  {name:'Lorem Landing Page',year:'2024',desc:'Lorem ipsum landing page designed for marketing and conversion optimization purposes.',tech:['HTML','CSS','JavaScript'],links:['Website','Source'],thumb:'#2a3a1a'},
+  {name:'Lorem Project Two',year:'2025',desc:'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',tech:['React','TypeScript','Tailwind','Vite'],links:['Website','Source'],thumb:'#2a4a7a'},
+  {name:'Lorem Project Three',year:'2025',desc:'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',tech:['React','TypeScript','Tailwind','Vite'],links:['Website','Source'],thumb:'#2a4a7a'},
+  {name:'Lorem Project Four',year:'2025',desc:'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',tech:['React','TypeScript','Tailwind','Vite'],links:['Website','Source'],thumb:'#2a4a7a'},
+  {name:'Lorem Project Five',year:'2025',desc:'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',tech:['React','TypeScript','Tailwind','Vite'],links:['Website','Source'],thumb:'#2a4a7a'},
+  {name:'Lorem Project Six',year:'2025',desc:'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',tech:['React','TypeScript','Tailwind','Vite'],links:['Website','Source'],thumb:'#2a4a7a'},
 ];
 
 const designProjects = [
@@ -45,9 +46,11 @@ const certs = [
   {name:'Lorem Certificate Six',issuer:'Lorem Microsoft',date:'Issued 06/06/2024',img:'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg'},
 ];
 
-  const toggleTheme = () => {
-    setDark(!dark);
-  };
+const toggleTheme = () => {
+  const next = !dark;
+  setDark(next);
+  document.body.classList.toggle('dark', next);
+};
 
   const switchTab = (tab, button) => {
     setActiveTab(tab);
@@ -244,7 +247,7 @@ const certs = [
         {themeIcon}
       </button>
 
-      <div className={`page ${dark ? 'dark' : ''}`}>
+      <div className="page">
 
         <div className="hero">
           <div className="hero-left">
@@ -253,7 +256,7 @@ const certs = [
               lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel gravida arcu. Vestibulum feugiat, sapien ultrices fermentum congue, quam velit venenatis sem
             </p>
           </div>
-          <div className="card-stack-wrap" id="cardStack" ref={stackRef}></div>
+          <DiscordPresence />
         </div>
 
         {/* ABOUT */}
