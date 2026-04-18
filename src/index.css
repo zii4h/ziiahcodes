@@ -1,3 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-name {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.section-label,
+.big-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.reveal {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(8px);
+  will-change: opacity, filter, transform;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease,
+    transform 0.3s ease;
+   
+}
+
+.reveal.visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -23,38 +59,52 @@ img {
   color: white;
 }
 
+.dark ::selection {
+  background: #6ed3c5b4;
+  color: #111111ce;
+}
+
 :root {
   --bg: #141414;
   --bg2: #111; /* work exp icon bg*/
   --bg3: #1a1a1a;
-  --text: #f0f0f0; /* Hi, I'm Ziah */
+  --text: #ececec; /* Hi, I'm Ziah */
   --text2: #aaa; /* paragraph texts */
   --text3: #666; /* subtext */
-  --border: #2a2a2a; /* work exp icon border*/
+  --border: #413a3a; /* work exp icon border*/
   --border2: #333;
-  --tag-bg: #f0f0f0; /* skills button */
-  --tag-text: #111; /* each skills text*/
+  --tag-bg: #504f4f; /* skills button */
+  --tag-text: #ececec; /* each skills text*/
   --card-bg: #111; /* discord card */
   --card-border: #2e2e2e; /* discord card border */
   --dock-bg: rgba(20, 20, 20, 0.75);
   --dock-border: rgba(255, 255, 255, 0.123);
+
+  --section-label: #ececec;
+
+  --link-hover: #00aeff; /* cert hover */
+  --link: #00aeff;
 }
 
 .dark {
-  --bg: #ffffff;
-  --bg2: #f8f8f8; /* work exp icon bg*/
-  --bg3: #f0f0f0;
-  --text: #0f0f0f; /* Hi, I'm Ziah */
-  --text2: #555; /* paragraph texts */
-  --text3: #888; /* subtext */
-  --border: #e5e5e5; /* work exp icon border*/
-  --border2: #d0d0d0;
-  --tag-bg: #111; /* skills button */
-  --tag-text: #fff; /* each skills text*/
-  --card-bg: #ffffff; /* discord card */
-  --card-border: #e8e8e8; /* discord card border */
-  --dock-bg: rgba(255, 255, 255, 0.7);
+  --bg: #157575;
+  --bg2: #097575; /* work exp icon bg*/
+  --bg3: #18a89041; /*discord cover*/
+  --text: #ececec; /* Hi, I'm Ziah */
+  --text2: #59e7c4; /* paragraph texts */
+  --text3: #59e7c4; /* subtext */
+  --border: #094e53; /* work exp icon border*/
+  --tag-bg: #094e53; /* skills button */
+  --tag-text: #59e7c4; /* each skills text*/
+  --card-bg: #097575; /* discord card */
+  --card-border: #3fa0a3e5; /* discord card border */
+  --dock-bg: rgba(48, 182, 164, 0.7);
   --dock-border: rgba(0, 0, 0, 0.1);
+
+  --section-label: rgb(12, 58, 61);
+
+  --link-hover: #a2fce5; /* cert hover */
+  --link: #ececec;
 }
 
 body {
@@ -241,7 +291,7 @@ a {
 .section-label {
   font-size: 13px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--section-label);
   margin-bottom: 14px;
 }
 
@@ -533,7 +583,7 @@ a {
 }
 
 .cert-card:hover .cert-name {
-  color: #0070f3;
+  color: var(--link-hover);
 }
 
 
@@ -550,7 +600,7 @@ a {
 }
 
 .link-blue {
-  color: #0070f3;
+  color: var(--link);
 }
 
 .dock {
