@@ -1,6 +1,8 @@
 import "./index.css";
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback, lazy } from "react";
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import useReveal from './useReveal';
+import Misc from './Misc.jsx';
 const DiscordPresence = lazy(() => import('./DiscordPresence.jsx'))
 
 export default function App() {
@@ -11,13 +13,6 @@ export default function App() {
   const skillsWrapRef = useRef(null);
   const projectsGridRef = useRef(null);
   const certsGridRef = useRef(null);
-
-  {/* deleted: photo cards 
-  const cardData = [
-    { type: "coffee", bg: "#c8a882", label: "hello!!!" },
-    { type: "code", bg: "#1e1e2e", label: "</>aaa" },
-    { type: "stats", bg: "#1a2a4a", label: "idk what is this" },
-  ];*/}
 
   const skills = [
     "test", "test", "test", "test", "testestes", "test", "test",
@@ -75,25 +70,18 @@ export default function App() {
     requestAnimationFrame(animation);
   }, []);
 
-  const themeIcon = dark ? (
-    <svg id="theme-icon" viewBox="0 0 24 24">
-      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-    </svg>
-  ) : (
-    <svg id="theme-icon" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="5" />
-      <line x1="12" y1="1" x2="12" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="23" />
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-      <line x1="1" y1="12" x2="3" y2="12" />
-      <line x1="21" y1="12" x2="23" y2="12" />
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-  );
+  const scrollToProjects = () => {
+    setActiveTab("dev");
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  // Card stack
+  const scrollToDesignProjects = () => {
+    setActiveTab("design");
+    const el = document.getElementById("projects");
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   useEffect(() => {
     const stack = stackRef.current;
     if (!stack) return;
@@ -102,6 +90,11 @@ export default function App() {
     const buildCards = () => {
       stack.innerHTML = '';
       cards = [];
+      const cardData = [
+        { type: "coffee", bg: "#c8a882", label: "hello!!!" },
+        { type: "code", bg: "#1e1e2e", label: "</>aaa" },
+        { type: "stats", bg: "#1a2a4a", label: "idk what is this" },
+      ];
       cardData.forEach((d, i) => {
         const el = document.createElement('div');
         el.className = 'stack-card';
@@ -202,7 +195,6 @@ export default function App() {
     buildCards();
   }, []);
 
-  // Skills
   useEffect(() => {
     if (skillsWrapRef.current) {
       skillsWrapRef.current.innerHTML = skills
@@ -211,7 +203,6 @@ export default function App() {
     }
   }, []);
 
-  // Certs — each card gets reveal class
   useEffect(() => {
     if (certsGridRef.current) {
       certsGridRef.current.innerHTML = certs.map(c => `
@@ -225,7 +216,6 @@ export default function App() {
     }
   }, []);
 
-  // Projects — each card gets reveal class
   const currentProjects = activeTab === 'dev' ? devProjects : designProjects;
   useEffect(() => {
     if (projectsGridRef.current && currentProjects.length > 0) {
@@ -244,209 +234,252 @@ export default function App() {
     }
   }, [activeTab, currentProjects]);
 
-  return (
-    <>
-      <button
-        className="theme-toggle"
-        onClick={toggleTheme}
-        id="themeBtn"
-        title="Toggle theme"
-      >
-        {themeIcon}
-      </button>
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
-      <div className="page">
+ const themeIcon = (
+  <svg viewBox="0 0 24 24">
+    <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+  </svg>
+);
 
-        {/* HERO — no reveal, loads instantly */}
-        <div className="hero reveal">
-          <div className="hero-left">
-            <h1 className="hero-name">Hi, I'm Ziah :)</h1>
-            <p className="hero-bio">
-              lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel gravida arcu. Vestibulum feugiat, sapien ultrices fermentum congue, quam velit venenatis sem
-            </p>
-          </div>
-          <DiscordPresence />
-        </div>
-
-        {/* ABOUT */}
-        <div className="section reveal">
-          <p className="section-label">ABOUT</p>
-          <p className="about-text">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit,{' '}
-            <a href="#" className="underline">sed do eiusmod tempor</a>,{' '}
-            <a href="#" className="underline">incididunt ut labore et dolore</a>{' '}
-            and <a href="#" className="underline">magna aliqua ut enim ad minim</a>.{' '}
-            Ut enim ad minim veniam, quis nostrud exercitationn{' '}
-            <a href="#" className="underline">ullamco laboris nisi ut aliquip</a>{' '}
-            ex ea commodo consequat. Duis aute irure dolor innn reprehenderit in{' '}
-            <a href="#" className="underline">voluptate velit esse cillum dolore</a>{' '}
-            eu fugiat nulla pariatur.
-          </p>
-        </div>
-
-        {/* WORK */}
-        <div className="section reveal">
-          <p className="section-label">WORK EXPERIENCE</p>
-          <div className="entry-list">
-            <div className="entry">
-              <div className="entry-logo">TEST</div>
-              <div className="entry-info">
-                <div className="entry-title">COMPANY NAME</div>
-                <div className="entry-sub">Role</div>
-              </div>
-              <div className="entry-date">Jan 2024 – Jan 2024</div>
-            </div>
-            <div className="entry">
-              <div className="entry-logo">TEST</div>
-              <div className="entry-info">
-                <div className="entry-title">COMPANY NAME</div>
-                <div className="entry-sub">Intern</div>
-              </div>
-              <div className="entry-date">Jan 2024 – Jan 2024</div>
-            </div>
-          </div>
-        </div>
-
-        {/* EDUCATION */}
-        <div className="section reveal" id="education">
-          <p className="section-label">EDUCATION</p>
-          <div className="entry-list">
-            <div className="entry">
-              <div className="entry-logo">HAU</div>
-              <div className="entry-info">
-                <div className="entry-title">Holy Angel University</div>
-                <div className="entry-sub">Bachelor's Degree in Information Technology (BSIT)</div>
-              </div>
-              <div className="entry-date">July 2024 – Present</div>
-            </div>
-          </div>
-        </div>
-
-        {/* SKILLS */}
-        <div className="section reveal">
-          <p className="section-label">SKILLS</p>
-          <div className="skills-wrap" id="skills-wrap" ref={skillsWrapRef}></div>
-        </div>
-
-        {/* PROJECTS */}
-        <div className="section reveal">
-          <div className="projects-header">
-            <div className="pill">MY PROJECTS</div>
-            <h2 className="big-title">Check out my latest works</h2>
-            <p className="sub-desc">
-              lorem ipsum here and there.
-            </p>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div className="tab-wrap">
-              <button
-                className={`tab-btn ${activeTab === 'dev' ? 'active' : ''}`}
-                onClick={(e) => switchTab('dev', e.target)}
-              >
-                Development
-              </button>
-              <button
-                className={`tab-btn ${activeTab === 'design' ? 'active' : ''}`}
-                onClick={(e) => switchTab('design', e.target)}
-              >
-                Design
-              </button>
-            </div>
-          </div>
-          <div className="projects-grid" id="projects-grid" ref={projectsGridRef}></div>
-        </div>
-
-        {/* CERTIFICATES */}
-        <div className="section reveal">
-          <div className="projects-header">
-            <div className="pill">CERTIFICATES</div>
-            <h2 className="big-title">Browse my achievements</h2>
-            <p className="sub-desc">
-              my certificationssss hereee
-            </p>
-          </div>
-          <div className="certs-grid" id="certs-grid" ref={certsGridRef}></div>
-        </div>
-
-        {/* CONTACT */}
-        <div className="contact-section reveal">
-          <div className="pill">CONTACT</div>
-          <h2 className="big-title" style={{ marginBottom: '10px' }}>
-            Get in Touch
-          </h2>
-          <p className="contact-desc">
-            Thanks for stopping by! If you want to talk, just DM me on{' '}
-            <a href="#" className="underline link-blue">Twitter</a>,{' '}
-            <a href="#" className="underline link-blue">Threads</a>{' '}
-            or{' '}
-            <a href="mailto:your@email.com" className="underline link-blue">
-              email me
-            </a>
-            . I'm always open to questions, ideas, or even random tech chats.
-          </p>
-        </div>
-
-      </div>
-
-      <p className="back-top" onClick={scrollToTop}>
-        Back to top
-      </p>
-
-      {/* FLOATING DOCK */}
-      <div className="dock">
-        <div className="dock-item" onClick={scrollToTop}>
-          <svg viewBox="0 0 24 24">
+  const Breadcrumb = () => (
+    <div className="breadcrumb">
+      {isHome ? (
+        <span className="breadcrumb-current">
+          <svg viewBox="0 0 24 24" className="breadcrumb-icon">
             <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
           </svg>
-          <span className="dock-tooltip">Home</span>
-        </div>
-        <div className="dock-sep"></div>
-        <div className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
-            <circle cx="4" cy="4" r="2" fill="currentColor" stroke="none" />
-          </svg>
-          <span className="dock-tooltip">LinkedIn</span>
-        </div>
-        <div className="dock-item">
-          <svg viewBox="0 0 24 24" style={{ fill: 'var(--text)', stroke: 'none' }}>
-            <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.57.1.78-.25.78-.55v-2.1c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.17A10.9 10.9 0 0112 6.84c.97.005 1.95.13 2.86.38 2.18-1.48 3.14-1.17 3.14-1.17.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.13v3.16c0 .3.2.66.79.55C20.71 21.38 24 17.08 24 12 24 5.73 18.27.5 12 .5z" />
-          </svg>
-          <span className="dock-tooltip">GitHub</span>
-        </div>
-        <div className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <rect x="2" y="2" width="20" height="20" rx="5" />
-            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-          </svg>
-          <span className="dock-tooltip">Instagram</span>
-        </div>
-      </div>
+        </span>
+      ) : (
+        <>
+          <Link to="/" className="breadcrumb-home">
+            <svg viewBox="0 0 24 24" className="breadcrumb-icon">
+              <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
+            </svg>
+          </Link>
+          <span className="breadcrumb-sep">›</span>
+          <span className="breadcrumb-current">
+            <svg viewBox="0 0 24 24" className="breadcrumb-page-icon">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            Misc
+          </span>
+        </>
+      )}
+    </div>
+  );
 
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        width: '380px',
-        height: '100vh',
-        pointerEvents: 'none',
-        zIndex: 9999,
-      }}>
-        <div style={{ pointerEvents: 'auto', width: '100%', height: '100%' }}>
-          {/* <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} /> */}
-        </div>
-      </div>
+  return (
+    <>
+    <div className="top-bar" />
+      <Breadcrumb />
+      <Link to={isHome ? "/misc" : "/"} className="theme-toggle" style={{ transform: isHome ? 'rotate(0deg)' : 'rotate(180deg)' }} title={isHome ? "Misc" : "Home"} > {themeIcon} </Link>
+      <Routes>
+        <Route path="/" element={<>
 
-      <div className="lanyard-fixed" style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        width: '380px',
-        height: '100vh',
-        pointerEvents: 'none',
-        zIndex: 9999,
-      }}></div>
+          <div className="page">
+
+            <div className="hero reveal">
+              <div className="hero-left">
+                <div className="hero-text">
+                  <h1 className="hero-name">Hi, I'm Ziah :)</h1>
+                  <p className="hero-bio">
+                    Yep, another dev profile. SQL geek. Curious CS student exploring data systems while building real-world experience through freelance work.
+                  </p>
+                  <div className="hero-socials">
+                    <span className="connect-text">let's connect!</span>
+                    <div className="social-icons">
+                      <a href="https://github.com/zii4h" target="_blank" rel="noreferrer">
+                        <i className="fab fa-github"></i>
+                      </a>
+                      <a href="https://linkedin.com/in/sophiakeziahpineda" target="_blank" rel="noreferrer">
+                        <i className="fab fa-linkedin"></i>
+                      </a>
+                      <a href="https://threads.net/@sphy.keziah" target="_blank" rel="noreferrer">
+                        <i className="fab fa-threads"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <DiscordPresence />
+            </div>
+
+            {/* ABOUT */}
+            <div className="section reveal" id="about">
+              <p className="section-label">ABOUT</p>
+              <p className="about-text">
+                I am a Computer Science student at{" "}
+                <a href="https://www.hau.edu.ph/" className="underline" target="_blank" rel="noopener noreferrer">
+                  Holy Angel University
+                </a> focused on data systems and database-driven development.
+                {" "}
+                I primarily work with SQL and relational databases such as MySQL and PostgreSQL (via Supabase), building and analyzing structured data systems. I also have experience with HTML, CSS, JavaScript, and React, which I use to support data-driven interfaces and projects.
+                {" "}
+                My work includes{" "}
+                <a href="#projects" className="underline" onClick={scrollToProjects}>
+                  personal projects
+                </a>{" "}
+                and a{" "}
+                <a onClick={scrollToDesignProjects} className="underline">
+                  real estate intranet system
+                </a> designed to streamline internal workflows for agents.
+                {" "}
+                I am currently strengthening my understanding of data modeling and ERD design to better structure complex systems.
+              </p>
+            </div>
+
+            {/* WORK */}
+            <div className="section reveal">
+              <p className="section-label">WORK EXPERIENCE</p>
+              <div className="entry-list">
+                <div className="entry">
+                  <div className="entry-logo">TEST</div>
+                  <div className="entry-info">
+                    <div className="entry-title">COMPANY NAME</div>
+                    <div className="entry-sub">Role</div>
+                  </div>
+                  <div className="entry-date">Jan 2024 – Jan 2024</div>
+                </div>
+                <div className="entry">
+                  <div className="entry-logo">TEST</div>
+                  <div className="entry-info">
+                    <div className="entry-title">COMPANY NAME</div>
+                    <div className="entry-sub">Intern</div>
+                  </div>
+                  <div className="entry-date">Jan 2024 – Jan 2024</div>
+                </div>
+              </div>
+            </div>
+
+            {/* EDUCATION */}
+            <div className="section reveal" id="education">
+              <p className="section-label">EDUCATION</p>
+              <div className="entry-list">
+                <div className="entry">
+                  <div className="entry-logo">HAU</div>
+                  <div className="entry-info">
+                    <div className="entry-title">Holy Angel University</div>
+                    <div className="entry-sub">Bachelor of Science in Computer Science (BSCS)</div>
+                  </div>
+                  <div className="entry-date">July 2024 – Present</div>
+                </div>
+              </div>
+            </div>
+
+            {/* SKILLS */}
+            <div className="section reveal">
+              <p className="section-label">SKILLS</p>
+              <div className="skills-wrap" id="skills-wrap" ref={skillsWrapRef}></div>
+            </div>
+
+            {/* PROJECTS */}
+            <div className="section reveal" id="projects">
+              <div className="projects-header">
+                <div className="pill">MY PROJECTS</div>
+                <h2 className="big-title">Check out my latest works</h2>
+                <p className="sub-desc">lorem ipsum here and there.</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div className="tab-wrap">
+                  <button
+                    className={`tab-btn ${activeTab === 'dev' ? 'active' : ''}`}
+                    onClick={(e) => switchTab('dev', e.target)}
+                  >
+                    Development
+                  </button>
+                  <button
+                    className={`tab-btn ${activeTab === 'design' ? 'active' : ''}`}
+                    onClick={(e) => switchTab('design', e.target)}
+                  >
+                    Design
+                  </button>
+                </div>
+              </div>
+              <div className="projects-grid" id="projects-grid" ref={projectsGridRef}></div>
+            </div>
+
+            {/* CERTIFICATES */}
+            <div className="section reveal">
+              <div className="projects-header">
+                <div className="pill">CERTIFICATES</div>
+                <h2 className="big-title">Browse my achievements</h2>
+                <p className="sub-desc">my certificationssss hereee</p>
+              </div>
+              <div className="certs-grid" id="certs-grid" ref={certsGridRef}></div>
+            </div>
+
+            {/* CONTACT */}
+            <div className="contact-section reveal">
+              <div className="pill">CONTACT</div>
+              <h2 className="big-title" style={{ marginBottom: '10px' }}>Get in Touch</h2>
+              <p className="contact-desc">
+                Thanks for stopping by! Looking for my next role in tech. Let's connect on{' '}
+                <a href="#" className="underline link-blue">Twitter</a>,{' '}
+                <a href="#" className="underline link-blue">Threads</a>{' '}
+                or{' '}
+                <a href="mailto:your@email.com" className="underline link-blue">email me</a>
+                . I'm always open to questions, ideas, or even random tech chats. :)
+              </p>
+            </div>
+
+          </div>
+
+          {/* <p className="back-top" onClick={scrollToTop}>Back to top</p>*/}
+
+          {/* FLOATING DOCK */}
+          <div className="dock">
+            <div className="dock-item" onClick={scrollToTop}>
+              <svg viewBox="0 0 24 24">
+                <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
+              </svg>
+              <span className="dock-tooltip">Home</span>
+            </div>
+            <div className="dock-sep"></div>
+            <div className="dock-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+                <circle cx="4" cy="4" r="2" fill="currentColor" stroke="none" />
+              </svg>
+              <span className="dock-tooltip">LinkedIn</span>
+            </div>
+            <div className="dock-item">
+              <svg viewBox="0 0 24 24" style={{ fill: 'var(--text)', stroke: 'none' }}>
+                <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.57.1.78-.25.78-.55v-2.1c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.17A10.9 10.9 0 0112 6.84c.97.005 1.95.13 2.86.38 2.18-1.48 3.14-1.17 3.14-1.17.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.13v3.16c0 .3.2.66.79.55C20.71 21.38 24 17.08 24 12 24 5.73 18.27.5 12 .5z" />
+              </svg>
+              <span className="dock-tooltip">GitHub</span>
+            </div>
+            <div className="dock-item">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+              <span className="dock-tooltip">Instagram</span>
+            </div>
+            <div className="dock-sep"></div>
+            <Link to="/misc" className="dock-item">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span className="dock-tooltip">Misc</span>
+            </Link>
+          </div>
+
+          <div className="lanyard-fixed" style={{
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            width: '380px',
+            height: '100vh',
+            pointerEvents: 'none',
+            zIndex: 9999,
+          }}></div>
+        </>} />
+
+        <Route path="/misc" element={<Misc />} />
+      </Routes>
     </>
   );
 }

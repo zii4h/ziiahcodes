@@ -78,7 +78,7 @@ const ActivityCard = ({ activity }) => {
     <div style={{ display: 'flex', gap: 10, alignItems: 'center', width: '100%' }}>
       {largeImg && (
         <div style={{ position: 'relative', flexShrink: 0 }}>
-          <img src={largeImg} alt="" width={62} height={64} /* spotify cover image */
+          <img src={largeImg} alt="" width={62} height={64}
             style={{ borderRadius: 8, display: 'block', objectFit: 'cover' }} />
           {smallImg && (
             <img src={smallImg} alt="" width={18} height={18}
@@ -88,47 +88,38 @@ const ActivityCard = ({ activity }) => {
         </div>
       )}
 
-      {/* ACTIVITY PADDING: 
-
-          Playing Spotify
-          Song Title
-          Song SInger
-          Music Player */}
-
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}> 
-
-        {/* Playing Spotify text */}
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
         {activity.name && (
-          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text)',
+          <div className="activity-name" style={{ fontSize: 11, fontWeight: 600, color: 'var(--text)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {isSpotify ? `Playing ${activity.name}` : activity.name}
           </div>
         )}
         {activity.details && (
-          <div style={{ fontSize: 11, color: 'var(--text2)',
+          <div className="activity-detail" style={{ fontSize: 11, color: 'var(--text2)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {activity.details}
           </div>
         )}
         {activity.state && (
-          <div style={{ fontSize: 11, color: 'var(--text3)',
+          <div className="activity-detail" style={{ fontSize: 11, color: 'var(--text3)',
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {activity.state}
           </div>
         )}
         {spotify && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
-            <span style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'monospace' }}>{spotify.cur}</span>
+            <span className="activity-detail" style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'monospace' }}>{spotify.cur}</span>
             <div style={{ flex: 1, height: 3, background: 'var(--border)', borderRadius: 2, overflow: 'hidden' }}>
               <div style={{ width: `${spotify.prog}%`, height: '100%',
                 background: 'var(--text)', borderRadius: 2,
                 transition: 'width 1s linear' }} />
             </div>
-            <span style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'monospace' }}>{spotify.total}</span>
+            <span className="activity-detail" style={{ fontSize: 10, color: 'var(--text3)', fontFamily: 'monospace' }}>{spotify.total}</span>
           </div>
         )}
         {elapsed && (
-          <div style={{ fontSize: 10, color: 'var(--text3)' }}>{elapsed}</div>
+          <div className="activity-detail" style={{ fontSize: 10, color: 'var(--text3)' }}>{elapsed}</div>
         )}
       </div>
     </div>
@@ -153,7 +144,7 @@ export default function DiscordPresence() {
     : `https://cdn.discordapp.com/embed/avatars/0.png`
 
   const cardStyle = {
-    width: 225,
+    width: 'clamp(160px, 30vw, 225px)',
     flexShrink: 0,
     border: '1px solid var(--card-border)',
     borderRadius: 14,
@@ -185,8 +176,7 @@ export default function DiscordPresence() {
       <div style={{ padding: '0 12px 12px' }}>
         {/* Avatar row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 8 }}>
-          {/* Avatar left-to-right adjustment */}
-          <div style={{ position: 'relative', marginTop: -22, marginLeft: -5 }}>  
+          <div style={{ position: 'relative', marginTop: -22, marginLeft: -5 }}>
             <img
               src={avatarUrl}
               alt="avatar"
@@ -196,19 +186,19 @@ export default function DiscordPresence() {
             <StatusDot status={status} />
           </div>
           <div style={{ marginBottom: 4 }}>
-            <img src={discordBadge} alt="badge" width={82} height={20} />
+            <img src={discordBadge} alt="badge" className="discord-badge" />
           </div>
         </div>
 
         {/* Name */}
-        <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', marginBottom: 2 }}>Zii4h 🦋</div>
-        <div style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 10 }}>@sphy.k</div>
+        <div className="profile-display-name">Zii4h 🦋</div>
+        <div className="profile-username">@sphy.k</div>
 
         {/* Activity */}
         {activity
           ? <ActivityCard activity={activity} />
           : <div style={{ fontSize: 11, color: 'var(--text3)', textAlign: 'center', padding: '8px 0' }}>
-              no status — probably napping 💤
+              no status - currently offline
             </div>
         }
       </div>
