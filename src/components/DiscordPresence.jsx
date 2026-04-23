@@ -198,7 +198,7 @@ export default function DiscordPresence() {
         {activity
           ? <ActivityCard activity={activity} />
           : <div style={{ fontSize: 11, color: 'var(--text3)', textAlign: 'center', padding: '8px 0' }}>
-              no status - currently offline
+              no status - check again later 
             </div>
         }
       </div>
