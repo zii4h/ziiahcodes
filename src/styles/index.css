@@ -1004,4 +1004,140 @@ a.dock-item {
   
 }
 
+* {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+html, body, .page {
+  overflow-x: hidden;
+}
+
+
+.hero {
+  align-items: center; 
+}
+
+.hero-left {
+  flex: 1 1 0;        
+  min-width: 0;      
+}
+
+.hero-name {
+  white-space: normal !important;
+  word-break: break-word;
+  font-size: clamp(20px, 5vw, 40px); 
+}
+
+
+.hero-bio {
+  font-size: clamp(12px, 3vw, 16px);
+}
+
+.hero-socials {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.connect-text {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.social-icons {
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.social-icons a {
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .card-stack-wrap {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+  }
+  .stack-card {
+    width: 82px;
+    height: 82px;
+  }
+}
+
+@media (max-width: 380px) {
+  .card-stack-wrap {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+  }
+  .stack-card {
+    width: 65px;
+    height: 65px;
+    border-radius: 10px;
+  }
+  .lanyard-hole { width: 10px; height: 10px; }
+  .avatar { width: 30px; height: 30px; font-size: 10px; }
+  .hello-badge { font-size: 8px; padding: 3px 6px; letter-spacing: 0.8px; }
+  .i-am-text { font-size: 7px; }
+}
+
+@media (max-width: 320px) {
+  .card-stack-wrap {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+  }
+  .stack-card {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+  }
+  .avatar { width: 24px; height: 24px; font-size: 9px; }
+  .hello-badge { font-size: 7px; padding: 2px 4px; letter-spacing: 0.5px; }
+}
+
+@media (max-width: 400px) {
+  .entry-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+  .entry-sub {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+}
+
+@media (max-width: 420px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .certs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .theme-toggle { right: 16px; }
+  .breadcrumb { left: 16px; }
+}
+
+@media (max-width: 380px) {
+  .tab-wrap { flex-wrap: wrap; width: 100%; }
+  .tab-btn { flex: 1; text-align: center; padding: 6px 10px; }
+}
+
+@media (max-width: 380px) {
+  .dock { gap: 4px; padding: 8px 10px; }
+  .dock-item { width: 34px; height: 34px; }
+  .dock-item svg { width: 17px; height: 17px; }
+}
+
 }

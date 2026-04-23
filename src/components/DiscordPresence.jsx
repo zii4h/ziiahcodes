@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useLanyard } from 'react-use-lanyard'
-import discordBadge from './static/discord_badge.svg'
+import discordBadge from '../assets/discord_badge.svg'
 
 
 const USER_ID = import.meta.env.VITE_DISCORD_ID
