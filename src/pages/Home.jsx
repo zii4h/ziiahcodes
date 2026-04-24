@@ -388,12 +388,15 @@ const skills = [
 
       {/* FLOATING DOCK */}
       <div className="dock">
+        
         <div className="dock-item" onClick={scrollToTop}>
           <svg viewBox="0 0 24 24">
             <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
           </svg>
           <span className="dock-tooltip">Home</span>
         </div>
+
+      {/* social links *
         <div className="dock-sep"></div>
         <div className="dock-item">
           <svg viewBox="0 0 24 24">
@@ -402,12 +405,14 @@ const skills = [
           </svg>
           <span className="dock-tooltip">LinkedIn</span>
         </div>
+
         <div className="dock-item">
           <svg viewBox="0 0 24 24" style={{ fill: 'var(--text)', stroke: 'none' }}>
             <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.57.1.78-.25.78-.55v-2.1c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.17A10.9 10.9 0 0112 6.84c.97.005 1.95.13 2.86.38 2.18-1.48 3.14-1.17 3.14-1.17.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.13v3.16c0 .3.2.66.79.55C20.71 21.38 24 17.08 24 12 24 5.73 18.27.5 12 .5z" />
           </svg>
           <span className="dock-tooltip">GitHub</span>
         </div>
+
         <div className="dock-item">
           <svg viewBox="0 0 24 24">
             <rect x="2" y="2" width="20" height="20" rx="5" />
@@ -416,11 +421,13 @@ const skills = [
           </svg>
           <span className="dock-tooltip">Instagram</span>
         </div>
+        */} 
+        
         <div className="dock-sep"></div>
         <Link to="/misc" className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
+        <svg viewBox="0 0 24 24">  {/* grid icon sa dock */}
+          <path d="M4 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM4 15a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+        </svg>
           <span className="dock-tooltip">Misc</span>
         </Link>
       </div>

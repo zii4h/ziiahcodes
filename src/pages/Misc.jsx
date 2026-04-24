@@ -506,6 +506,27 @@ export default function Misc() {
             </div> {/* end bento grid */}
         </div> {/* end misc-inner */}
       </div> {/* end misc-shell */}
-    </>
+
+      {/* FLOATING DOCK */}
+      <div className="dock">
+
+        <Link to="/" className="dock-item">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
+          </svg>
+          <span className="dock-tooltip">Home</span>
+        </Link>
+
+        <div className="dock-sep"></div>
+
+        <Link to="/misc" className="dock-item">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM4 15a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+          <span className="dock-tooltip">Home Page</span>
+        </Link>
+
+      </div>
+          </>
   );
 }

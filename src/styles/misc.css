@@ -40,7 +40,7 @@
   .bento-col-3 { grid-column: span 3; }
 
   .bento-label {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 1.2px;
     color: var(--text3);
@@ -217,7 +217,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* based in card (location) */
   .bento-icon {
     width: 34px;
     height: 34px;
