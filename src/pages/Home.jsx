@@ -11,12 +11,23 @@ export default function Home() {
   const projectsGridRef = useRef(null);
   const certsGridRef = useRef(null);
 
-  const skills = [
-    "test", "test", "test", "test", "testestes", "test", "test",
-    "test", "tet sete", "set", ".test", "test", "test",
-    "test", "test", "stet", "estse", "setest", "test",
-    "test", "test"
-  ];
+const skills = [
+  "SQL",
+  "Oracle",
+  "PostgreSQL",
+  "XAMPP",
+  "DB Design",
+  "React-Vite",
+  "HTML-CSS-JS",
+  "Python",
+  "Ruby",
+  "Git",
+  "Jira-Notion",
+  "MS Office Tools",
+  "Framer-Canva",
+  "Web Dev",
+  "Systems Analysis",
+];
 
   const devProjects = [
     { name: 'Lorem Project One', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
@@ -328,7 +339,7 @@ export default function Home() {
           <div className="projects-header">
             <div className="pill">MY PROJECTS</div>
             <h2 className="big-title">Check out my latest works</h2>
-            <p className="sub-desc">lorem ipsum here and there.</p>
+            <p className="sub-desc">Projects I’ve built, learned from, and improved. <br/>Here are a few of my favorites.</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div className="tab-wrap">
@@ -354,7 +365,7 @@ export default function Home() {
           <div className="projects-header">
             <div className="pill">CERTIFICATES</div>
             <h2 className="big-title">Browse my achievements</h2>
-            <p className="sub-desc">my certificationssss hereee</p>
+            <p className="sub-desc">Certifications and awards that showcase my journey of continuous learning and expertise in the field.</p>
           </div>
           <div className="certs-grid" id="certs-grid" ref={certsGridRef}></div>
         </div>

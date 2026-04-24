@@ -400,9 +400,9 @@ export default function Misc() {
 
             {/* things I enjoy */}
             <div className="bento-card bento-col-2 card-enjoy">
-              <div className="bento-label">things i actually enjoy</div>
+              <div className="bento-label">things i actually like / love</div>
               <div className="tag-cloud">
-                {['SQL', 'database design', 'lo-fi music', 'iced coffee', 'React', 'late-night coding', 'cats', 'horror films', 'ramen', 'dark mode everything', 'One Piece', 'anime', 'content creation'].map(t => (
+                {['Sci-Fi Movies', 'Iced Tea', 'Discord', 'Late night coding', 'Cats', 'One Piece', 'Dark mode', 'Discovering Music', 'Reading Psychology'].map(t => (
                   <span key={t} className="bento-tag">{t}</span>
                 ))}
               </div>
