@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import '../styles/misc.css';
+import { MdOpenInNew } from "react-icons/md";
 
 const LASTFM_USER = 'sophziah';
 const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
@@ -13,7 +14,7 @@ const PHOTOS = [
   '/photos/photo5.jpg',
 ];
 
-const FALLBACK_COLORS = ['#2d3561', '#a53860', '#1b4332', '#7b2d8b', '#b5451b'];
+const FALLBACK_COLORS = ['#2d3561', '#a53860', '#1b4332', '#7b2d8b', '#b5451b']; /* photocards */ 
 
 function DraggablePhotoStack() {
   const stackRef = useRef(null);
@@ -135,10 +136,52 @@ function DraggablePhotoStack() {
       <div className="photo-stack-wrap">
         <div className="photo-stack-inner" ref={stackRef} />
       </div>
-      
     </>
   );
 }
+
+
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+const fetchArtistImage = async (artistName) => {
+  try {
+    await sleep(200);
+
+    const searchRes = await fetch(
+      `https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(artistName)}&limit=1&fmt=json`,
+      { headers: { 'User-Agent': 'sophziah-portfolio/1.0 (sophiakeziahpineda@gmail.com)' } }
+    );
+    const searchData = await searchRes.json();
+    const mbid = searchData.artists?.[0]?.id;
+    if (!mbid) return null;
+
+    await sleep(200);
+
+    const rgRes = await fetch(
+      `https://musicbrainz.org/ws/2/release-group?artist=${mbid}&type=album&limit=1&fmt=json`,
+      { headers: { 'User-Agent': 'sophziah-portfolio/1.0 (sophiakeziahpineda@gmail.com)' } }
+    );
+    const rgData = await rgRes.json();
+    const rgMbid = rgData['release-groups']?.[0]?.id;
+    if (!rgMbid) return null;
+
+    await sleep(200);
+
+    const caRes = await fetch(
+      `https://coverartarchive.org/release-group/${rgMbid}`,
+      { headers: { 'User-Agent': 'sophziah-portfolio/1.0 (sophiakeziahpineda@gmail.com)' } }
+    );
+    if (!caRes.ok) return null;
+
+    const caData = await caRes.json();
+    const front = caData.images?.find(img => img.front) || caData.images?.[0];
+
+    return front?.thumbnails?.small || front?.thumbnails?.['250'] || front?.image || null;
+
+  } catch {
+    return null;
+  }
+};
 
 function LastFmCard() {
   const [artists, setArtists] = useState(null);
@@ -146,9 +189,9 @@ function LastFmCard() {
   const [loading, setLoading] = useState(true);
 
   const FALLBACK_ARTISTS = [
-    { name: 'Artist One', plays: '1,234' },
-    { name: 'Artist Two', plays: '987' },
-    { name: 'Artist Three', plays: '654' },
+    { name: 'Artist One', plays: '1,234', image: null },
+    { name: 'Artist Two', plays: '987', image: null },
+    { name: 'Artist Three', plays: '654', image: null },
   ];
 
   useEffect(() => {
@@ -169,10 +212,28 @@ function LastFmCard() {
         const topData = await topRes.json();
         const infoData = await infoRes.json();
 
-        const mapped = (topData.topartists?.artist || []).map(a => ({
-          name: a.name,
-          plays: Number(a.playcount).toLocaleString(),
-        }));
+const rawArtists = topData.topartists?.artist || [];
+
+const mapped = rawArtists.map(a => ({
+  name: a.name,
+  plays: Number(a.playcount).toLocaleString(),
+  image: null,
+}));
+
+setArtists(mapped); 
+
+rawArtists.forEach(async (a, index) => {
+  const image = await fetchArtistImage(a.name);
+
+  setArtists(prev => {
+    const updated = [...prev];
+    updated[index] = {
+      ...updated[index],
+      image,
+    };
+    return updated;
+  });
+});
 
         setArtists(mapped.length ? mapped : FALLBACK_ARTISTS);
         setTotalScrobbles(Number(infoData.user?.playcount).toLocaleString() || '—');
@@ -189,56 +250,101 @@ function LastFmCard() {
 
   return (
     <>
-      <div className="bento-label">last.fm · top artists</div>
+      
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+        <div className="bento-label" style={{ marginBottom: 0 }}>
+          my top played artists <span className="heart">&lt;3</span>
+        </div>
+        <a
+          href={`https://www.last.fm/user/${LASTFM_USER}`}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            fontSize: '10px',
+            color: 'var(--text3)',
+            textDecoration: 'none',
+            opacity: 0.9,
+            transition: 'opacity 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity = 1}
+          onMouseLeave={e => e.currentTarget.style.opacity = 0.7}
+        >
+          {LASTFM_USER} <MdOpenInNew size={10} />
+        </a>
+      </div>
+
+      {/* Artist rows */}
       <div className="artist-list">
         {loading
           ? [1, 2, 3].map(i => (
-              <div key={i} className="artist-row" style={{ opacity: 0.4 }}>
+              <div key={i} className="artist-row" style={{ opacity: 0.4, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: 'var(--border2)', flexShrink: 0 }} />
                 <div className="artist-rank">{i}</div>
-                <div className="artist-info">
-                  <div className="artist-name" style={{ background: 'var(--border2)', borderRadius: 4, height: 12, width: '60%' }} />
+                <div className="artist-info" style={{ flex: 1 }}>
+                  <div className="artist-name" style={{ background: 'var(--border2)', borderRadius: 4, height: 11, width: '55%' }} />
                 </div>
+                <div style={{ background: 'var(--border2)', borderRadius: 4, height: 10, width: '30px', flexShrink: 0 }} />
               </div>
             ))
           : (artists || FALLBACK_ARTISTS).map((a, i) => (
-              <div key={a.name} className="artist-row">
-                <span className="artist-rank">#{i + 1}</span>
-                <div className="artist-info">
-                  <div className="artist-name">{a.name}</div>
-                  <div className="artist-plays">{a.plays} plays</div>
+              <div key={a.name} className="artist-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {/* Artist image */}
+                <div style={{
+                  width: '28px', height: '28px', borderRadius: '4px',
+                  background: 'var(--bg3)', flexShrink: 0, overflow: 'hidden',
+                }}>
+                  {a.image ? (
+                    <img
+                      src={a.image}
+                      alt={a.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={e => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  ) : (
+                    <div style={{
+                      width: '100%', height: '100%',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '10px', color: 'var(--text3)',
+                    }}>♪</div>
+                  )}
+                </div>
+
+                <span className="artist-rank" style={{ flexShrink: 0 }}>#{i + 1}</span>
+
+                {/* Name fills remaining space */}
+                <div className="artist-info" style={{ flex: 1, minWidth: 0 }}>
+                  <div className="artist-name" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {a.name}
+                  </div>
+                </div>
+
+                {/* Plays pushed far right */}
+                <div className="artist-plays" style={{ flexShrink: 0, marginLeft: '8px', textAlign: 'right' }}>
+                  {a.plays} plays
                 </div>
               </div>
             ))
         }
       </div>
+
       {totalScrobbles && (
-        <div className="lfm-total">
-          total scrobbles — <span>{totalScrobbles}</span>
-        </div>
+        <a
+        className="lfm-total"
+        href={`https://www.last.fm/user/${LASTFM_USER}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        total scrobbles — <span>{totalScrobbles}</span>
+      </a>
       )}
     </>
   );
 }
 
 export default function Misc() {
-useEffect(() => {
-  if (window.innerWidth <= 640) return; 
-  const el = document.documentElement;
-  const body = document.body;
-  const prevEl = el.style.overflow;
-  const prevBody = body.style.overflow;
-  el.style.overflow = 'hidden';
-  body.style.overflow = 'hidden';
-  return () => {
-    el.style.overflow = prevEl;
-    body.style.overflow = prevBody;
-  };
-}, []);
-
+  
   return (
     <>
-      
-
       <div className="misc-shell">
 
         {/* BREADCRUMB */}
@@ -273,20 +379,18 @@ useEffect(() => {
             </div>
 
             {/* my photo stack */}
-            <div className="bento-card card-photos" style={{ minHeight: '140px' }}>
-              <div className="bento-label">i touch grass too yk!</div>
+            <div className="bento-card card-photos" style={{ padding: 0, overflow: 'hidden', minHeight: '180px', background: 'transparent', border: 'none' }}>
               <DraggablePhotoStack />
             </div>
 
             {/* based in (loc)*/}
             <div className="bento-card card-location">
-              <div className="bento-icon">📍</div>
               <div className="bento-label" style={{ marginTop: '4px' }}>based in</div>
-              <div className="bento-title" style={{ fontSize: '13px' }}>Pampanga, 🇵🇭</div>
+              <div className="bento-title" style={{ fontSize: '14px' }}>Pampanga, 🇵🇭</div>
               <div className="bento-desc">Holy Angel University</div>
             </div>
 
-            {/* info dumpo: free time */}
+            {/* info dump: free time */}
             <div className="bento-card bento-col-2 card-freetime" style={{ borderStyle: 'dashed' }}>
               <div className="bento-label">free time</div>
               <p className="info-text">
@@ -312,7 +416,6 @@ useEffect(() => {
                   { name: 'MySQL', level: 85 },
                   { name: 'React', level: 65 },
                   { name: 'PostgreSQL', level: 70 },
-                  { name: 'Python', level: 60 },
                 ].map(({ name, level }) => (
                   <div key={name}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
@@ -347,7 +450,7 @@ useEffect(() => {
                     <div className="bento-desc" style={{ fontSize: '10px' }}>sophiakeziahpineda</div>
                   </div>
                 </div>
-                <span className="bento-arrow">↗</span>
+                <span className="bento-arrow"><MdOpenInNew /></span>
               </div>
             </a>
 
@@ -361,7 +464,7 @@ useEffect(() => {
                     <div className="bento-desc" style={{ fontSize: '10px' }}>@sphy.keziah</div>
                   </div>
                 </div>
-                <span className="bento-arrow">↗</span>
+                <span className="bento-arrow"><MdOpenInNew /></span>
               </div>
             </a>
 
@@ -379,31 +482,30 @@ useEffect(() => {
                     <div className="bento-desc" style={{ fontSize: '10px' }}>@zii4h</div>
                   </div>
                 </div>
-                <span className="bento-arrow">↗</span>
+                <span className="bento-arrow"><MdOpenInNew /></span>
               </div>
             </a>
 
-          </div>
-
-          {/* get in touch bar */}
-          <a href="mailto:sophiakeziahpineda@gmail.com" className="git-bar reveal">
-            <div className="git-bar-left">
-              <div className="git-bar-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22,6 12,13 2,6"/>
-                </svg>
+            {/* get in touch bar */}
+            <a href="mailto:sophiakeziahpineda@gmail.com" className="git-bar bento-col-3">
+              <div className="git-bar-left">
+                <div className="git-bar-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                </div>
+                <div>
+                  <div className="git-bar-title">Get in Touch</div>
+                  <div className="git-bar-sub">Let's chat</div>
+                </div>
               </div>
-              <div>
-                <div className="git-bar-title">Get in Touch</div>
-                <div className="git-bar-sub">Let's chat →</div>
-              </div>
-            </div>
-            <span className="git-bar-arrow">↗</span>
-          </a>
+              <span className="git-bar-arrow"><MdOpenInNew /></span>
+            </a>
 
-        </div>
-      </div>
+            </div> {/* end bento grid */}
+        </div> {/* end misc-inner */}
+      </div> {/* end misc-shell */}
     </>
   );
 }
