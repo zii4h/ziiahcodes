@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import '../styles/misc.css';
 import { MdOpenInNew } from "react-icons/md";
-
-const LASTFM_USER = 'sophziah';
-const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
+import LastFmCard from '../components/LastFmCard';
 
 const PHOTOS = [
   '/photos/photo1.jpg',
@@ -14,7 +12,7 @@ const PHOTOS = [
   '/photos/photo5.jpg',
 ];
 
-const FALLBACK_COLORS = ['#2d3561', '#a53860', '#1b4332', '#7b2d8b', '#b5451b']; /* photocards */ 
+const FALLBACK_COLORS = ['#2d3561', '#a53860', '#1b4332', '#7b2d8b', '#b5451b'];
 
 function DraggablePhotoStack() {
   const stackRef = useRef(null);
@@ -132,217 +130,13 @@ function DraggablePhotoStack() {
   }, []);
 
   return (
-    <>
-      <div className="photo-stack-wrap">
-        <div className="photo-stack-inner" ref={stackRef} />
-      </div>
-    </>
-  );
-}
-
-
-const sleep = ms => new Promise(res => setTimeout(res, ms));
-
-const fetchArtistImage = async (artistName) => {
-  try {
-    await sleep(200);
-
-    const searchRes = await fetch(
-      `https://musicbrainz.org/ws/2/artist/?query=${encodeURIComponent(artistName)}&limit=1&fmt=json`,
-      { headers: { 'User-Agent': 'sophziah-portfolio/1.0 (sophiakeziahpineda@gmail.com)' } }
-    );
-    const searchData = await searchRes.json();
-    const mbid = searchData.artists?.[0]?.id;
-    if (!mbid) return null;
-
-    await sleep(200);
-
-    const rgRes = await fetch(
-      `https://musicbrainz.org/ws/2/release-group?artist=${mbid}&type=album&limit=1&fmt=json`,
-      { headers: { 'User-Agent': 'sophziah-portfolio/1.0 (sophiakeziahpineda@gmail.com)' } }
-    );
-    const rgData = await rgRes.json();
-    const rgMbid = rgData['release-groups']?.[0]?.id;
-    if (!rgMbid) return null;
-
-    await sleep(200);
-
-    const caRes = await fetch(
-      `https://coverartarchive.org/release-group/${rgMbid}`,
-      { headers: { 'User-Agent': 'sophziah-portfolio/1.0 (sophiakeziahpineda@gmail.com)' } }
-    );
-    if (!caRes.ok) return null;
-
-    const caData = await caRes.json();
-    const front = caData.images?.find(img => img.front) || caData.images?.[0];
-
-    return front?.thumbnails?.small || front?.thumbnails?.['250'] || front?.image || null;
-
-  } catch {
-    return null;
-  }
-};
-
-function LastFmCard() {
-  const [artists, setArtists] = useState(null);
-  const [totalScrobbles, setTotalScrobbles] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const FALLBACK_ARTISTS = [
-    { name: 'Artist One', plays: '1,234', image: null },
-    { name: 'Artist Two', plays: '987', image: null },
-    { name: 'Artist Three', plays: '654', image: null },
-  ];
-
-  useEffect(() => {
-    const isReal = LASTFM_API_KEY && LASTFM_API_KEY !== 'YOUR_LASTFM_API_KEY';
-    if (!isReal) {
-      setArtists(FALLBACK_ARTISTS);
-      setTotalScrobbles('4,103');
-      setLoading(false);
-      return;
-    }
-
-    const fetchData = async () => {
-      try {
-        const [topRes, infoRes] = await Promise.all([
-          fetch(`https://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=3`),
-          fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json`),
-        ]);
-        const topData = await topRes.json();
-        const infoData = await infoRes.json();
-
-const rawArtists = topData.topartists?.artist || [];
-
-const mapped = rawArtists.map(a => ({
-  name: a.name,
-  plays: Number(a.playcount).toLocaleString(),
-  image: null,
-}));
-
-setArtists(mapped); 
-
-rawArtists.forEach(async (a, index) => {
-  const image = await fetchArtistImage(a.name);
-
-  setArtists(prev => {
-    const updated = [...prev];
-    updated[index] = {
-      ...updated[index],
-      image,
-    };
-    return updated;
-  });
-});
-
-        setArtists(mapped.length ? mapped : FALLBACK_ARTISTS);
-        setTotalScrobbles(Number(infoData.user?.playcount).toLocaleString() || '—');
-      } catch {
-        setArtists(FALLBACK_ARTISTS);
-        setTotalScrobbles('—');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return (
-    <>
-      
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-        <div className="bento-label" style={{ marginBottom: 0 }}>
-          my top played artists <span className="heart">&lt;3</span>
-        </div>
-        <a
-          href={`https://www.last.fm/user/${LASTFM_USER}`}
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            fontSize: '10px',
-            color: 'var(--text3)',
-            textDecoration: 'none',
-            opacity: 0.9,
-            transition: 'opacity 0.2s',
-          }}
-          onMouseEnter={e => e.currentTarget.style.opacity = 1}
-          onMouseLeave={e => e.currentTarget.style.opacity = 0.7}
-        >
-          {LASTFM_USER} <MdOpenInNew size={10} />
-        </a>
-      </div>
-
-      {/* Artist rows */}
-      <div className="artist-list">
-        {loading
-          ? [1, 2, 3].map(i => (
-              <div key={i} className="artist-row" style={{ opacity: 0.4, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '28px', height: '28px', borderRadius: '4px', background: 'var(--border2)', flexShrink: 0 }} />
-                <div className="artist-rank">{i}</div>
-                <div className="artist-info" style={{ flex: 1 }}>
-                  <div className="artist-name" style={{ background: 'var(--border2)', borderRadius: 4, height: 11, width: '55%' }} />
-                </div>
-                <div style={{ background: 'var(--border2)', borderRadius: 4, height: 10, width: '30px', flexShrink: 0 }} />
-              </div>
-            ))
-          : (artists || FALLBACK_ARTISTS).map((a, i) => (
-              <div key={a.name} className="artist-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {/* Artist image */}
-                <div style={{
-                  width: '28px', height: '28px', borderRadius: '4px',
-                  background: 'var(--bg3)', flexShrink: 0, overflow: 'hidden',
-                }}>
-                  {a.image ? (
-                    <img
-                      src={a.image}
-                      alt={a.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                      onError={e => { e.currentTarget.style.display = 'none'; }}
-                    />
-                  ) : (
-                    <div style={{
-                      width: '100%', height: '100%',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '10px', color: 'var(--text3)',
-                    }}>♪</div>
-                  )}
-                </div>
-
-                <span className="artist-rank" style={{ flexShrink: 0 }}>#{i + 1}</span>
-
-                {/* Name fills remaining space */}
-                <div className="artist-info" style={{ flex: 1, minWidth: 0 }}>
-                  <div className="artist-name" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {a.name}
-                  </div>
-                </div>
-
-                {/* Plays pushed far right */}
-                <div className="artist-plays" style={{ flexShrink: 0, marginLeft: '8px', textAlign: 'right' }}>
-                  {a.plays} plays
-                </div>
-              </div>
-            ))
-        }
-      </div>
-
-      {totalScrobbles && (
-        <a
-        className="lfm-total"
-        href={`https://www.last.fm/user/${LASTFM_USER}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        total scrobbles — <span>{totalScrobbles}</span>
-      </a>
-      )}
-    </>
+    <div className="photo-stack-wrap">
+      <div className="photo-stack-inner" ref={stackRef} />
+    </div>
   );
 }
 
 export default function Misc() {
-  
   return (
     <>
       <div className="misc-shell">
@@ -383,14 +177,14 @@ export default function Misc() {
               <DraggablePhotoStack />
             </div>
 
-            {/* based in (loc)*/}
+            {/* based in */}
             <div className="bento-card card-location">
               <div className="bento-label" style={{ marginTop: '4px' }}>based in</div>
               <div className="bento-title" style={{ fontSize: '14px' }}>Pampanga, 🇵🇭</div>
               <div className="bento-desc">Holy Angel University</div>
             </div>
 
-            {/* info dump: free time */}
+            {/* free time */}
             <div className="bento-card bento-col-2 card-freetime" style={{ borderStyle: 'dashed' }}>
               <div className="bento-label">free time</div>
               <p className="info-text">
@@ -408,7 +202,7 @@ export default function Misc() {
               </div>
             </div>
 
-            {/* my stack (w level bar) */}
+            {/* my stack */}
             <div className="bento-card card-stack">
               <div className="bento-label">my stack</div>
               <div className="stack-list">
@@ -503,13 +297,12 @@ export default function Misc() {
               <span className="git-bar-arrow"><MdOpenInNew /></span>
             </a>
 
-            </div> {/* end bento grid */}
+          </div> {/* end bento grid */}
         </div> {/* end misc-inner */}
       </div> {/* end misc-shell */}
 
       {/* FLOATING DOCK */}
       <div className="dock">
-
         <Link to="/" className="dock-item">
           <svg viewBox="0 0 24 24">
             <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
@@ -525,8 +318,7 @@ export default function Misc() {
           </svg>
           <span className="dock-tooltip">Home Page</span>
         </Link>
-
       </div>
-          </>
+    </>
   );
 }

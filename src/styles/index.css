@@ -88,6 +88,10 @@ img {
 
   --link-hover: #00aeff; /* cert hover */
   --link: #00aeff;
+
+  
+  --link-lastfm: #14c56d;
+  --link-lastfm-hovered: #616161;
 }
 
 .dark {
