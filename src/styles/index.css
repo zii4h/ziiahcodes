@@ -76,8 +76,8 @@ img {
   --text2: #aaa; /* paragraph texts */
   --text3: #666; /* subtext */
   --border: #413a3a; /* work exp icon border*/
-  --border2: #333;
-  --tag-bg: #504f4f; /* skills button */
+  --border2: #333333;
+  --tag-bg: #504f4f59; /* skills button */
   --tag-text: #ececec; /* each skills text*/
   --card-bg: #111; /* discord card */
   --card-border: #2e2e2e; /* discord card border */
@@ -113,6 +113,27 @@ img {
 
   --link-hover: #a2fce5; /* cert hover */
   --link: #ececec;
+}
+
+.skills-category {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.skills-category-label {
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted, #888); 
+}
+
+.skills-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .hero-socials {
@@ -431,20 +452,21 @@ html {
 }
 
 .entry-logo {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 1.5px solid var(--border);
-  background: var(--bg2);
-  flex-shrink: 0;
+  overflow: hidden;        /* this makes it crop into a circle */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--text3);
+  background: #111;        /* optional */
 }
 
+.entry-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;       /* fills the circle nicely */
+}
 .entry-info {
   flex: 1;
   min-width: 0; 
@@ -489,9 +511,9 @@ html {
   align-items: center;
   background: var(--tag-bg);
   color: var(--tag-text);
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 400;
   padding: 4px 10px;
   flex-shrink: 0; 
   white-space: nowrap;
@@ -868,20 +890,6 @@ a.dock-item {
   width: 100%;
 }
 
-.entry-logo {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: var(--bg2);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text3);
-}
 
 .entry-info {
   flex: 1;
@@ -950,7 +958,7 @@ a.dock-item {
   .entry-logo {
     width: 36px;
     height: 36px;
-    font-size: 11px;
+   /* font-size: 11px;*/
   }
   
   .entry-title {

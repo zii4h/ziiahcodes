@@ -18,12 +18,13 @@
     gap: 10px;
     width: 100%;
     flex: 1;
+    
   }
 
   .bento-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 14px;
+    border-radius: 11px;
     padding: 14px 16px;
     display: flex;
     flex-direction: column;
@@ -32,6 +33,7 @@
     overflow: hidden;
     position: relative;
     min-height: 0;
+    
   }
 
   .bento-card:hover { border-color: var(--border2); }
@@ -63,6 +65,31 @@
     line-height: 1.5;
   }
   
+
+  .bento-card-icon {
+  color: var(--text2);
+  flex-shrink: 0;
+  opacity: 50%;
+}
+
+.bento-card-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.card-location,
+.card-linkedin,
+.card-threads,
+.card-github {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
   /* Last.fm */
 .artist-list {
   display: flex;
@@ -79,12 +106,12 @@
   gap: 10px;
   padding: 6px 10px;
   border-radius: 6px;
-  background: var(--bg3);
+  background: #2c2c2c3d;
   transition: background 0.15s;
 }
 
 .artist-row:hover {
-  background: var(--border2);
+  background: #49494936; /* very subtle white */
 }
 
 .artist-rank {
@@ -137,7 +164,7 @@
 
 .lfm-total {
   font-size: 10px;
-  color: #888;
+  color: #7b837fc7;
   margin-top: 4px;
   flex-shrink: 0;
   text-decoration: none;
@@ -172,38 +199,44 @@
   text-underline-offset: 3px;
 }
 
+.lfm-redirect:hover svg {
+  transform: translateX(3px);
+}
+
+.lfm-redirect svg {
+  transition: transform 0.2s ease;
+}
+
   /* my photo stack  */
 .photo-stack-wrap {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 0;
-  padding: 0; 
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .photo-stack-inner {
   position: relative;
-  width: 100%;  
-  height: 100%; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
 }
 
-  .stack-card {
-    width: 85%;   
-    height: 85%;  
-    position: absolute;
-    inset: 0;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: grab;
-    user-select: none;
-    will-change: transform;
-    border: 1px solid var(--card-border);
-  }
-
+.stack-card {
+  width: 180px;
+  height: 180px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 11px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  will-change: transform;
+  border: 1px solid var(--card-border);
+}
   .stack-card.dragging { cursor: grabbing; transition: none !important; }
 
   .stack-card img {
@@ -269,13 +302,15 @@
   }
 
   .bento-tag {
-    background: var(--tag-bg);
+    background: #44444477;
     color: var(--tag-text);
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color:#e7e7e7;
     padding: 3px 8px;
     white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
   }
 
   .stack-list {
@@ -298,35 +333,92 @@
   }
 
   .bento-arrow {
-    font-size: 16px;
+    font-size: 12px;
     color: var(--text3);
     transition: transform 0.2s, color 0.2s;
+    position: relative;
+    top: -1px; /* increase to move lower */
+
   }
 
   .bento-card:hover .bento-arrow {
     color: var(--text2);
   }
 
+.bento-card:hover .bento-arrow svg {
+  transform: translateX(3px);
+  transition: transform 0.2s ease;
+}
+
   .bento-card.accent-blue {
     background: linear-gradient(135deg, var(--card-bg) 60%, rgba(0, 255, 0, 0.06));
     border-color: rgba(13, 255, 0, 0.2);
   }
 
+  .gear-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px 10px;
+  margin-top: 2px;
+}
+
+.gear-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.gear-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--card-border);
+  background: var(--bg3);
+  overflow: hidden;
+}
+
+.gear-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.gear-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gear-sub {
+  font-size: 10px;
+  color: #7a7a7a;
+  line-height: 1.2;
+}
+
   @media (max-width: 640px) {
-    .bento-grid {
-      grid-template-columns: repeat(6, 1fr);
-    }
-    .card-lastfm   { grid-column: span 6; grid-row: 1; }
-    .card-location { grid-column: span 3; grid-row: 2; }
-    .card-photos   { grid-column: span 3; grid-row: 2; }
-    .card-freetime { grid-column: span 6; grid-row: 3; }
-    .card-enjoy    { grid-column: span 3; grid-row: 4; }
-    .card-stack    { grid-column: span 3; grid-row: 4; }
-    .card-linkedin { grid-column: span 2; grid-row: 5; }
-    .card-threads  { grid-column: span 2; grid-row: 5; }
-    .card-github   { grid-column: span 2; grid-row: 5; }
-    .git-bar       { grid-column: span 6; grid-row: 6; } 
+  .bento-grid {
+    grid-template-columns: repeat(6, 1fr);
   }
+  .card-lastfm   { grid-column: span 6; grid-row: 1; }
+  .card-location { grid-column: span 3; grid-row: 2; }
+  .card-photos   { grid-column: span 3; grid-row: 2; }
+  .card-freetime { grid-column: span 6; grid-row: 3; }
+  .card-enjoy    { grid-column: span 6; grid-row: 4; }  /* was span 3 */
+  .card-stack    { grid-column: span 6; grid-row: 5; }  /* was span 3, now below */
+  .card-linkedin { grid-column: span 2; grid-row: 6; }  /* bumped down */
+  .card-threads  { grid-column: span 2; grid-row: 6; }
+  .card-github   { grid-column: span 2; grid-row: 6; }
+  .git-bar       { grid-column: span 6; grid-row: 7; }
+}
   
 
   @media (max-width: 400px) {
@@ -359,15 +451,15 @@
 
   .git-bar-left {
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* change center to flex-end */
     gap: 12px;
   }
 
   .git-bar-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #f05064;
+    width: 29px;
+    height: 29px;
+    border-radius: 24%;
+    background: rgb(134, 74, 83);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -376,17 +468,21 @@
 
 
   .git-bar-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-  }
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  
+ 
 
-  .git-bar-sub {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 1px;
-  }
+}
+
+.git-bar-sub {
+  font-size: 10px;
+  color: rgb(192, 108, 121);
+  
+ 
+}
 
   .git-bar-arrow {
     font-size: 18px;

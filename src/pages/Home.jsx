@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import useReveal from '../hooks/useReveal.js';
 const DiscordPresence = lazy(() => import('../components/DiscordPresence.jsx'));
 
+
 export default function Home() {
   useReveal();
   const [activeTab, setActiveTab] = useState("dev");
@@ -11,23 +12,13 @@ export default function Home() {
   const projectsGridRef = useRef(null);
   const certsGridRef = useRef(null);
 
-const skills = [
-  "SQL",
-  "Oracle",
-  "PostgreSQL",
-  "XAMPP",
-  "DB Design",
-  "React-Vite",
-  "HTML-CSS-JS",
-  "Python",
-  "Ruby",
-  "Git",
-  "Jira-Notion",
-  "MS Office Tools",
-  "Framer-Canva",
-  "Web Dev",
-  "Systems Analysis",
-];
+const skills = {
+  "Libraries & Frameworks": ["ReactJS", "NodeJS", "ShadCN UI", "Astro", "Vanilla JS"],
+  "Tools & Platforms": ["GitHub", "Git", "Vite", "Vercel", "Docker", "Jira-Notion", "Figma", "Framer-Canva", "Affinity", "MS Office Tools"],
+  "Programming Languages": ["JavaScript", "TypeScript", "Python", "Ruby", "HTML-CSS-JS"],
+  "Database & Workbench": ["SQL", "MySQL", "Oracle", "Supabase / PostgreSQL", "XAMPP / phpMyAdmin", "Snowflake", "DataDog"],
+  "Artificial Intelligence": ["Guardrails", "Claude", "OpenAI", "Ollama", "GPT-4"],
+};
 
   const devProjects = [
     { name: 'Lorem Project One', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
@@ -43,13 +34,37 @@ const skills = [
   ];
 
   const certs = [
-    { name: 'Lorem Certificate One', issuer: 'Lorem Org', date: 'Issued 03/03/2024', img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg' },
-    { name: 'Lorem Certificate Two', issuer: 'Lorem Institute', date: 'Issued 02/02/2024', img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg' },
-    { name: 'Lorem Certificate Three', issuer: 'Lorem Org', date: 'Issued 03/03/2024', img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg' },
-    { name: 'Lorem Certificate Four', issuer: 'Lorem Microsoft', date: 'Issued 05/05/2024', img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg' },
-    { name: 'Lorem Certificate Five', issuer: 'Lorem Microsoft', date: 'Issued 05/05/2024', img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg' },
-    { name: 'Lorem Certificate Six', issuer: 'Lorem Microsoft', date: 'Issued 06/06/2024', img: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg' },
-  ];
+  {
+    name: 'Oracle Data Platform Foundations Associate',
+    issuer: 'Oracle',
+    date: 'Issued Oct 2025',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg'
+  },
+  {
+    name: 'JavaScript',
+    issuer: 'Cisco Networking Academy',
+    date: 'Issued Sep 2025',
+    img: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg'
+  },
+  {
+    name: 'Responsive Web Design',
+    issuer: 'freeCodeCamp',
+    date: 'Issued Sep 2025',
+    img: 'https://design-style-guide.freecodecamp.org/downloads/fcc_primary_small.svg'
+  },
+  {
+    name: 'Introduction to SQL',
+    issuer: 'Simplilearn',
+    date: 'Issued Sep 2025',
+    img: 'https://tse2.mm.bing.net/th/id/OIP.2aiBRDQfykNAXEwa5kSEXQHaEK?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3'
+  },
+  {
+    name: 'CompTIA IT Fundamentals+',
+    issuer: 'CompTIA',
+    date: 'Issued Mar 2024',
+    img: 'https://opportunityindex.org/wp-content/uploads/2013/08/CompTIA_Logo_png_format-768x172.png'
+  }
+];
 
   const switchTab = (tab, button) => {
     setActiveTab(tab);
@@ -197,13 +212,19 @@ const skills = [
     buildCards();
   }, []);
 
-  useEffect(() => {
-    if (skillsWrapRef.current) {
-      skillsWrapRef.current.innerHTML = skills
-        .map(s => `<span class="skill-tag">${s}</span>`)
-        .join('');
-    }
-  }, []);
+useEffect(() => {
+  if (skillsWrapRef.current) {
+    skillsWrapRef.current.innerHTML = Object.entries(skills)
+      .map(([category, tags]) => `
+        <div class="skills-category">
+          <span class="skills-category-label">${category}</span>
+          <div class="skills-tags-row">
+            ${tags.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+  }
+}, []);
 
   useEffect(() => {
     if (certsGridRef.current) {
@@ -266,8 +287,11 @@ const skills = [
           <DiscordPresence />
         </div>
 
-        {/* ABOUT */}
+        {/* ABOUT ME */}
+
         <div className="section reveal" id="about">
+
+          {/* V1 ABOUT
           <p className="section-label">ABOUT</p>
           <p className="about-text">
             I am a Computer Science student at{" "}
@@ -287,11 +311,21 @@ const skills = [
             </a> designed to streamline internal workflows for agents.
             {" "}
             I am currently strengthening my understanding of data modeling and ERD design to better structure complex systems.
-          </p>
+          </p> */}
+
+          {/* V2 ABOUT */}
+          <p className="section-label">ABOUT</p>
+          <p className="about-text">
+            Currently exploring data pipelines, ETL processes, and large-scale data systems using tools like Snowflake, along with DBMS such as PostgreSQL and MySQL, while pursuing a degree in Computer Science at{" "} <a href="https://www.hau.edu.ph/" className="underline" target="_blank" rel="noopener noreferrer">Holy Angel University</a>. 
+
+          </p> 
         </div>
 
         {/* WORK */}
+        
         <div className="section reveal">
+
+         {/* WIP 
           <p className="section-label">WORK EXPERIENCE</p>
           <div className="entry-list">
             <div className="entry">
@@ -310,7 +344,8 @@ const skills = [
               </div>
               <div className="entry-date">Jan 2024 – Jan 2024</div>
             </div>
-          </div>
+          </div>*/}
+
         </div>
 
         {/* EDUCATION */}
@@ -318,7 +353,9 @@ const skills = [
           <p className="section-label">EDUCATION</p>
           <div className="entry-list">
             <div className="entry">
-              <div className="entry-logo">HAU</div>
+              <div className="entry-logo">
+                <img src="/photos/hau-logo.png" alt="Holy Angel University logo" />
+              </div>
               <div className="entry-info">
                 <div className="entry-title">Holy Angel University</div>
                 <div className="entry-sub">Bachelor of Science in Computer Science (BSCS)</div>

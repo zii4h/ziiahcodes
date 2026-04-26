@@ -72,7 +72,7 @@ function ItemRow({ item, index, showImage }) {
       {showImage && (
         <div style={{
           width: 28, height: 28, borderRadius: 4,
-          background: 'var(--bg3)', flexShrink: 0, overflow: 'hidden',
+          background: 'var(--border2)', flexShrink: 0, overflow: 'hidden',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 10, color: 'var(--text3)',
         }}>
@@ -132,7 +132,7 @@ function TabBtn({ tab, active, onClick }) {
         fontSize: 10, fontWeight: 700, letterSpacing: '0.8px',
         textTransform: 'uppercase',
         color: active ? 'var(--text)' : 'var(--text3)',
-        padding: '5px 0 4px',
+        padding: '1px 0 1px',
         display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3,
         flexShrink: 0,
         transition: 'color 0.2s',
@@ -141,7 +141,7 @@ function TabBtn({ tab, active, onClick }) {
     >
       <span>{tab.label}</span>
       <span style={{
-        display: 'block', height: 2, width: '100%', borderRadius: 2,
+        display: 'block', height: 1, width: '100%', borderRadius: 2,
         background: active ? 'var(--link-lastfm)' : hovered ? 'var(--link-lastfm-hovered)' : 'var(--border2)',
         transition: 'background 0.2s',
       }} />
@@ -240,12 +240,14 @@ export default function LastFmCard() {
             target="_blank" rel="noreferrer"
             className="lfm-redirect"
         >
-            {LASTFM_USER} <MdOpenInNew size={10} style={{ verticalAlign: 'middle' }} />
+            {LASTFM_USER} <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', transition: 'transform 0.2s ease' }}>
+  <path d="M5 12h14M13 6l6 6-6 6"/>
+</svg>
         </a>
 
         {totalScrobbles && (
             <a className="lfm-total" href={`https://www.last.fm/user/${LASTFM_USER}`} target="_blank" rel="noreferrer" style={{ marginTop: 0 }}>
-            total scrobbles — <span>{totalScrobbles}</span> <MdOpenInNew size={10} style={{ verticalAlign: 'middle' }} />
+            total scrobbles — <span>{totalScrobbles}</span> 
             </a>
         )}
         </div>
