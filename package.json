@@ -22,7 +22,7 @@
 
     "predeploy": "npm run build",
 
-    "deploy": "gh-pages -d dist --message 'Deploy: last.fm card'"
+    "deploy": "gh-pages -d dist"
 
   },
 
