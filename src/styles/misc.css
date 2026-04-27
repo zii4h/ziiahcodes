@@ -1,6 +1,7 @@
 .misc-shell {
   display: flex;
   flex-direction: column;
+  scroll-margin-top: 0;
 }
 
 .misc-inner {

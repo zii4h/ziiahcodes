@@ -1,7 +1,15 @@
-import { useState, useCallback } from "react";
+import { useEffect } from "react";
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './Home.jsx';
 import Misc from './Misc.jsx';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
 
 export default function App() {
   const location = useLocation();
@@ -42,6 +50,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollToTop />
       <div className="top-bar" />
       <Breadcrumb />
       <Link
