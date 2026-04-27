@@ -229,7 +229,7 @@ export default function Misc() {
                   ].map(({ name, sub, icon }) => (
                     <div key={name} className="gear-item">
                       <div className="gear-icon">
-                        <img src={`/public/misc-gear-svg/${icon}.svg`} alt={name} width="16" height="16" />
+                        <img src={`/misc-gear-svg/${icon}.svg`} alt={name} width="16" height="16" />
                       </div>
                       <div className="gear-text">
                         <span className="gear-name">{name}</span>
