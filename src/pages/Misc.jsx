@@ -163,8 +163,8 @@ export default function Misc() {
         <div className="misc-inner page">
 
           <div className="section reveal" style={{ marginBottom: '12px', flexShrink: 0 }}>
-            <p className="section-label">MISC</p>
-            <p className="about-text">a little corner of randomness. things i like, things i think about, things that make me, me.</p>
+            <p className="section-label">Miscellaneous Stuff</p>
+            <p className="about-text">A place for things that don’t have a place.</p>
           </div>
 
           {/* bento grid */}
@@ -333,7 +333,7 @@ export default function Misc() {
                 </div>
                <div style={{ alignSelf: 'flex-end', lineHeight: 1.5 }}>
                 <div className="git-bar-title">Get in Touch</div>
-                <div className="git-bar-sub">Let's chat</div>
+                <div className="git-bar-sub">Say Hi!</div>
               </div>
               </div>
               <span className="git-bar-arrow"><MdOpenInNew /></span>

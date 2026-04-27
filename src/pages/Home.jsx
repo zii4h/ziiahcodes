@@ -12,59 +12,87 @@ export default function Home() {
   const projectsGridRef = useRef(null);
   const certsGridRef = useRef(null);
 
-const skills = {
-  "Libraries & Frameworks": ["ReactJS", "NodeJS", "ShadCN UI", "Astro", "Vanilla JS"],
-  "Tools & Platforms": ["GitHub", "Git", "Vite", "Vercel", "Docker", "Jira-Notion", "Figma", "Framer-Canva", "Affinity", "MS Office Tools"],
-  "Programming Languages": ["JavaScript", "TypeScript", "Python", "Ruby", "HTML-CSS-JS"],
-  "Database & Workbench": ["SQL", "MySQL", "Oracle", "Supabase / PostgreSQL", "XAMPP / phpMyAdmin", "Snowflake", "DataDog"],
-  "Artificial Intelligence": ["Guardrails", "Claude", "OpenAI", "Ollama", "GPT-4"],
-};
+  const skills = {
+    "Libraries & Frameworks": ["ReactJS", "NodeJS", "ShadCN UI", "Astro", "Vanilla JS"],
+    "Tools & Platforms": ["GitHub", "Git", "Vite", "Vercel", "Docker", "Jira-Notion", "Figma", "Framer-Canva", "Affinity", "MS Office Tools"],
+    "Programming Languages": ["JavaScript", "TypeScript", "Python", "Ruby", "HTML-CSS-JS"],
+    "Database & Workbench": ["SQL", "MySQL", "Oracle", "Supabase / PostgreSQL", "XAMPP / phpMyAdmin", "Snowflake", "DataDog"],
+    "Artificial Intelligence": ["Guardrails", "Claude", "OpenAI", "Ollama", "GPT-4"],
+  };
 
   const devProjects = [
-    { name: 'Lorem Project One', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
-    { name: 'Lorem Project Two', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
-    { name: 'Lorem Project Three', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
-    { name: 'Lorem Project Four', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
-    { name: 'Lorem Project Five', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
-    { name: 'Lorem Project Six', year: '2025', desc: 'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', tech: ['React', 'TypeScript', 'Tailwind', 'Vite'], links: ['Website', 'Source'], thumb: '#2a4a7a' },
+    {
+      name: 'LlamaBot', year: '2026',
+      desc: 'A lightweight web chatbot that runs locally using Ollama models and can be dropped into any website with minimal setup. Built for clients.',
+      tech: ['ollama - llama 3.2', 'JavaScript', 'HTML', 'CSS'],
+      links: [{ label: 'Source', url: 'https://github.com/zii4h/LlamaBot' }],
+      thumb: '/project-img/llama-bot.png'
+    },
+    {
+      name: 'Notion-to-Jupyter Converter', year: '2025',
+      desc: 'Python script that converts Notion markdowns into Jupyter Notebook (.ipynb), with support for code blocks and embedded images.',
+      tech: ['Python', 'nbformat', 'Personal Use'],
+      links: [{ label: 'Source', url: 'https://github.com/zii4h/Notion-to-Jupyter' }],
+      thumb: '/project-img/jupyter.png'
+    },
+    {
+      name: 'Shulte Table Game', year: '2025',
+      desc: 'A number clicking game designed to improve focus and reaction speed by identifying numbers in sequence as quickly as possible.',
+      tech: ['Figma', 'HTML', 'CSS', 'JavaScript'],
+      links: [{ label: 'Demo', url: 'https://zii4h.github.io/Schulte-Table-Game/' }, { label: 'Source', url: 'https://github.com/zii4h/Schulte-Table-Game' }],
+      thumb: '/project-img/Schulte.png'
+    },
+    {
+      name: 'CLIZiiah', year: '2025',
+      desc: 'A terminal-style interface that organizes and displays my personal links. Built as a project to learn TypeScript.',
+      tech: ['TypeScript', 'SCSS', 'HTML'],
+      links: [{ label: 'Demo', url: 'https://ziiah.vercel.app/' }, { label: 'Source', url: 'https://github.com/zii4h/CLIZiiah' }],
+      thumb: '/project-img/CLI.png'
+    },
   ];
 
   const designProjects = [
-    { name: 'Lorem Landing Project', year: '2024', desc: 'Lorem ipsum design focused landing page for mobile application showcasing UI components.', tech: ['HTML', 'CSS', 'JavaScript'], links: ['Website', 'Source'], thumb: '#1a3a1a' },
+    {
+      name: 'LoVi', year: '2025',
+      desc: 'Streams Lofi music with pixel interfaces and customizable ambience noise. Built for studying and relaxation.',
+      tech: ['TypeScript', 'JavaScript', 'HTML'],
+      links: [{ label: 'Website', url: 'https://lov1-pi.vercel.app/' }],
+      thumb: '/project-img/lovi.png'
+    },
   ];
 
   const certs = [
-  {
-    name: 'Oracle Data Platform Foundations Associate',
-    issuer: 'Oracle',
-    date: 'Issued Oct 2025',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg'
-  },
-  {
-    name: 'JavaScript',
-    issuer: 'Cisco Networking Academy',
-    date: 'Issued Sep 2025',
-    img: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg'
-  },
-  {
-    name: 'Responsive Web Design',
-    issuer: 'freeCodeCamp',
-    date: 'Issued Sep 2025',
-    img: 'https://design-style-guide.freecodecamp.org/downloads/fcc_primary_small.svg'
-  },
-  {
-    name: 'Introduction to SQL',
-    issuer: 'Simplilearn',
-    date: 'Issued Sep 2025',
-    img: 'https://tse2.mm.bing.net/th/id/OIP.2aiBRDQfykNAXEwa5kSEXQHaEK?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3'
-  },
-  {
-    name: 'CompTIA IT Fundamentals+',
-    issuer: 'CompTIA',
-    date: 'Issued Mar 2024',
-    img: 'https://opportunityindex.org/wp-content/uploads/2013/08/CompTIA_Logo_png_format-768x172.png'
-  }
-];
+    {
+      name: 'Oracle Data Platform Foundations Associate',
+      issuer: 'Oracle',
+      date: 'Issued Oct 2025',
+      img: 'https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg'
+    },
+    {
+      name: 'JavaScript',
+      issuer: 'Cisco Networking Academy',
+      date: 'Issued Sep 2025',
+      img: 'https://upload.wikimedia.org/wikipedia/commons/6/64/Cisco_logo.svg'
+    },
+    {
+      name: 'Responsive Web Design',
+      issuer: 'freeCodeCamp',
+      date: 'Issued Sep 2025',
+      img: 'https://design-style-guide.freecodecamp.org/downloads/fcc_primary_small.svg'
+    },
+    {
+      name: 'Introduction to SQL',
+      issuer: 'Simplilearn',
+      date: 'Issued Sep 2025',
+      img: 'https://tse2.mm.bing.net/th/id/OIP.2aiBRDQfykNAXEwa5kSEXQHaEK?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3'
+    },
+    {
+      name: 'CompTIA IT Fundamentals+',
+      issuer: 'CompTIA',
+      date: 'Issued Mar 2024',
+      img: 'https://opportunityindex.org/wp-content/uploads/2013/08/CompTIA_Logo_png_format-768x172.png'
+    }
+  ];
 
   const switchTab = (tab, button) => {
     setActiveTab(tab);
@@ -212,19 +240,19 @@ const skills = {
     buildCards();
   }, []);
 
-useEffect(() => {
-  if (skillsWrapRef.current) {
-    skillsWrapRef.current.innerHTML = Object.entries(skills)
-      .map(([category, tags]) => `
-        <div class="skills-category">
-          <span class="skills-category-label">${category}</span>
-          <div class="skills-tags-row">
-            ${tags.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+  useEffect(() => {
+    if (skillsWrapRef.current) {
+      skillsWrapRef.current.innerHTML = Object.entries(skills)
+        .map(([category, tags]) => `
+          <div class="skills-category">
+            <span class="skills-category-label">${category}</span>
+            <div class="skills-tags-row">
+              ${tags.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+            </div>
           </div>
-        </div>
-      `).join('');
-  }
-}, []);
+        `).join('');
+    }
+  }, []);
 
   useEffect(() => {
     if (certsGridRef.current) {
@@ -240,17 +268,24 @@ useEffect(() => {
   }, []);
 
   const currentProjects = activeTab === 'dev' ? devProjects : designProjects;
+
   useEffect(() => {
     if (projectsGridRef.current && currentProjects.length > 0) {
       projectsGridRef.current.innerHTML = currentProjects.map(p => `
         <div class="project-card reveal">
-          <div class="project-thumb" style="background:${p.thumb}">${p.name.split(':')[0]}</div>
+          <div class="project-thumb" style="${
+            p.thumb.startsWith('#')
+              ? `background-color:${p.thumb};`
+              : `background-image:url(${p.thumb}); background-size:cover; background-position:center;`
+          }"></div>
           <div class="project-body">
             <div class="project-name">${p.name}</div>
             <div class="project-year">${p.year}</div>
             <div class="project-desc">${p.desc}</div>
             <div class="tech-wrap">${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}</div>
-            <div class="project-links">${p.links.map(l => `<span class="proj-link">🌐 ${l}</span>`).join('')}</div>
+            <div class="project-links">
+              ${p.links.map(l => `<a class="proj-link" href="${l.url}" target="_blank" rel="noreferrer">🌐 ${l.label}</a>`).join('')}
+            </div>
           </div>
         </div>
       `).join('');
@@ -266,11 +301,18 @@ useEffect(() => {
             <div className="hero-text">
               <h1 className="hero-name">Hi, I'm Ziah :)</h1>
               <p className="hero-bio">
-                Yep, another dev profile. SQL geek. Curious CS student exploring data systems while building real-world experience through freelance work.
+                - Data nerd with an SQL obsession.
+                <br/>- Based in PH.
+                <br/>- IDK what to write here.
+                <br/>- I like food.
+
               </p>
               <div className="hero-socials">
-                <span className="connect-text">let's connect!</span>
+                <span className="connect-text"></span>
                 <div className="social-icons">
+                  <a href="mailto:sophiakeziahpineda@gmail.com" target="_blank" rel="noreferrer">
+                    <i className="fas fa-envelope"></i>
+                  </a>
                   <a href="https://github.com/zii4h" target="_blank" rel="noreferrer">
                     <i className="fab fa-github"></i>
                   </a>
@@ -280,6 +322,7 @@ useEffect(() => {
                   <a href="https://threads.net/@sphy.keziah" target="_blank" rel="noreferrer">
                     <i className="fab fa-threads"></i>
                   </a>
+                  
                 </div>
               </div>
             </div>
@@ -288,65 +331,18 @@ useEffect(() => {
         </div>
 
         {/* ABOUT ME */}
-
         <div className="section reveal" id="about">
-
-          {/* V1 ABOUT
           <p className="section-label">ABOUT</p>
           <p className="about-text">
-            I am a Computer Science student at{" "}
-            <a href="https://www.hau.edu.ph/" className="underline" target="_blank" rel="noopener noreferrer">
-              Holy Angel University
-            </a> focused on data systems and database-driven development.
-            {" "}
-            I primarily work with SQL and relational databases such as MySQL and PostgreSQL (via Supabase), building and analyzing structured data systems. I also have experience with HTML, CSS, JavaScript, and React, which I use to support data-driven interfaces and projects.
-            {" "}
-            My work includes{" "}
-            <a href="#projects" className="underline" onClick={scrollToProjects}>
-              personal projects
-            </a>{" "}
-            and a{" "}
-            <a onClick={scrollToDesignProjects} className="underline">
-              real estate intranet system
-            </a> designed to streamline internal workflows for agents.
-            {" "}
-            I am currently strengthening my understanding of data modeling and ERD design to better structure complex systems.
-          </p> */}
+            I'm <strong>Sophia Keziah</strong> <em>aka</em> "Ziah" in online spaces. I'm a Computer Science student with a designer's eye ~ specializing in building and scaling SaaS products used by end-users. I build from scratch, think in systems, and design for user experience. 
 
-          {/* V2 ABOUT */}
-          <p className="section-label">ABOUT</p>
-          <p className="about-text">
-            Currently exploring data pipelines, ETL processes, and large-scale data systems using tools like Snowflake, along with DBMS such as PostgreSQL and MySQL, while pursuing a degree in Computer Science at{" "} <a href="https://www.hau.edu.ph/" className="underline" target="_blank" rel="noopener noreferrer">Holy Angel University</a>. 
+            <br/><br/>Within academe, I’m diving deeper into DBMS tools like Snowflake, PostgreSQL, and MySQL, built on a solid foundation in SQL. A journey I'm all in for. 🛠️
 
-          </p> 
+          </p>
         </div>
 
-        {/* WORK */}
-        
-        <div className="section reveal">
-
-         {/* WIP 
-          <p className="section-label">WORK EXPERIENCE</p>
-          <div className="entry-list">
-            <div className="entry">
-              <div className="entry-logo">TEST</div>
-              <div className="entry-info">
-                <div className="entry-title">COMPANY NAME</div>
-                <div className="entry-sub">Role</div>
-              </div>
-              <div className="entry-date">Jan 2024 – Jan 2024</div>
-            </div>
-            <div className="entry">
-              <div className="entry-logo">TEST</div>
-              <div className="entry-info">
-                <div className="entry-title">COMPANY NAME</div>
-                <div className="entry-sub">Intern</div>
-              </div>
-              <div className="entry-date">Jan 2024 – Jan 2024</div>
-            </div>
-          </div>*/}
-
-        </div>
+        {/* WORK — WIP */}
+        <div className="section reveal"></div>
 
         {/* EDUCATION */}
         <div className="section reveal" id="education">
@@ -376,7 +372,7 @@ useEffect(() => {
           <div className="projects-header">
             <div className="pill">MY PROJECTS</div>
             <h2 className="big-title">Check out my latest works</h2>
-            <p className="sub-desc">Projects I’ve built, learned from, and improved. <br/>Here are a few of my favorites.</p>
+            <p className="sub-desc">Projects I've built, learned from, and improved. <br />Here are a few of my favorites.</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div className="tab-wrap">
@@ -410,61 +406,40 @@ useEffect(() => {
         {/* CONTACT */}
         <div className="contact-section reveal">
           <div className="pill">CONTACT</div>
-          <h2 className="big-title" style={{ marginBottom: '10px' }}>Get in Touch</h2>
+          <h2 className="big-title" style={{ marginBottom: '10px' }}>Let's Connect:</h2>
           <p className="contact-desc">
-            Thanks for stopping by! Looking for my next role in tech. Let's connect on{' '}
-            <a href="#" className="underline link-blue">Twitter</a>,{' '}
-            <a href="#" className="underline link-blue">Threads</a>{' '}
-            or{' '}
-            <a href="mailto:your@email.com" className="underline link-blue">email me</a>
-            . I'm always open to questions, ideas, or even random tech chats. :)
+             Thanks for stopping by! Reach me on my{' '}
+            <a href="#" className="underline link-blue">Threads</a>,{' '}
+            <a href="#" className="underline link-blue">Discord</a>,{' '}
+            <a href="#" className="underline link-blue">LinkedIn</a>,{' '}
+            or {' '}
+            <a href="mailto:your@email.com" className="underline link-blue">email!</a> <br/>I'm always open to questions, ideas, or even random tech chats. :)
           </p>
         </div>
 
+        <span className="footer-note">
+        (C) 2026 Sophia Keziah.{" "}
+        <a href="https://github.com/zii4h/ziiahcodes" className="footer-link" target="_blank" rel="noreferrer">
+          Source
+        </a>
+      </span>
+
+    
       </div>
 
       {/* FLOATING DOCK */}
       <div className="dock">
-        
         <div className="dock-item" onClick={scrollToTop}>
           <svg viewBox="0 0 24 24">
             <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
           </svg>
           <span className="dock-tooltip">Home</span>
         </div>
-
-      {/* social links *
-        <div className="dock-sep"></div>
-        <div className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
-            <circle cx="4" cy="4" r="2" fill="currentColor" stroke="none" />
-          </svg>
-          <span className="dock-tooltip">LinkedIn</span>
-        </div>
-
-        <div className="dock-item">
-          <svg viewBox="0 0 24 24" style={{ fill: 'var(--text)', stroke: 'none' }}>
-            <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.57.1.78-.25.78-.55v-2.1c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.28-1.67-1.28-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.17A10.9 10.9 0 0112 6.84c.97.005 1.95.13 2.86.38 2.18-1.48 3.14-1.17 3.14-1.17.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.13v3.16c0 .3.2.66.79.55C20.71 21.38 24 17.08 24 12 24 5.73 18.27.5 12 .5z" />
-          </svg>
-          <span className="dock-tooltip">GitHub</span>
-        </div>
-
-        <div className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <rect x="2" y="2" width="20" height="20" rx="5" />
-            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-          </svg>
-          <span className="dock-tooltip">Instagram</span>
-        </div>
-        */} 
-        
         <div className="dock-sep"></div>
         <Link to="/misc" className="dock-item">
-        <svg viewBox="0 0 24 24">  {/* grid icon sa dock */}
-          <path d="M4 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM4 15a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-        </svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M4 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM4 15a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
           <span className="dock-tooltip">Misc</span>
         </Link>
       </div>
