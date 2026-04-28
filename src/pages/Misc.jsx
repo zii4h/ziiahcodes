@@ -323,7 +323,7 @@ export default function Misc() {
             </a>
 
             {/* get in touch bar */}
-            <a href="mailto:sophiakeziahpineda@gmail.com" className="git-bar bento-col-3">
+            <a href="mailto:sophykeziah@gmail.com" className="git-bar bento-col-3">
               <div className="git-bar-left">
                 <div className="git-bar-icon">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

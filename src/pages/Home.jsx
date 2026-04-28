@@ -310,7 +310,7 @@ export default function Home() {
               <div className="hero-socials">
                 <span className="connect-text"></span>
                 <div className="social-icons">
-                  <a href="mailto:sophiakeziahpineda@gmail.com" target="_blank" rel="noreferrer">
+                  <a href="mailto:sophykeziah@gmail.com" target="_blank" rel="noreferrer">
                     <i className="fas fa-envelope"></i>
                   </a>
                   <a href="https://github.com/zii4h" target="_blank" rel="noreferrer">
