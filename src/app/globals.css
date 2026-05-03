@@ -25,7 +25,12 @@
     opacity 0.3s ease,
     filter 0.3s ease,
     transform 0.3s ease;
-   
+}
+
+.no-js .reveal {
+  opacity: 1;
+  filter: none;
+  transform: none;
 }
 
 .reveal.visible {

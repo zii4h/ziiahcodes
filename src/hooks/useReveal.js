@@ -39,7 +39,7 @@ export default function useReveal() {
       };
     };
 
-    const timer = setTimeout(init, 300);
+    const timer = setTimeout(init, 100);
     return () => clearTimeout(timer);
   }, []);
 }

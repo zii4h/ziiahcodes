@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { MdOpenInNew } from "react-icons/md";
 import LastFmCard from "./LastFmCard";
+import useReveal from "@/hooks/useReveal";
 
 const PHOTOS = [
   "/photos/photo1.jpg",
@@ -146,6 +147,7 @@ function DraggablePhotoStack() {
 }
 
 export default function MiscClient() {
+  useReveal();
   return (
     <>
       <div className="top-bar" />
