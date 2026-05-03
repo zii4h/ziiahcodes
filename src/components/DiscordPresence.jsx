@@ -97,14 +97,10 @@ const ActivityCard = ({ activity }) => {
   return (
     <div style={{ display: "flex", gap: 10, alignItems: "center", width: "100%" }}>
       {largeImg && (
-        <div style={{ position: "relative", flexShrink: 0 }}>
-          <img
-            src={largeImg}
-            alt=""
-            width={62}
-            height={64}
-            style={{ borderRadius: 8, display: "block", objectFit: "cover" }}
-          />
+  <div style={{ position: "relative", flexShrink: 0 }}>
+    <img src={largeImg} alt="" width={62} height={64}
+      className="activity-large-img"
+      style={{ borderRadius: 8, display: "block", objectFit: "cover" }} />
           {smallImg && (
             <img
               src={smallImg}

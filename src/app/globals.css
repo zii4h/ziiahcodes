@@ -240,6 +240,13 @@ img {
   color: var(--text2);
 }
 
+@media (max-width: 600px) {
+  .activity-large-img {
+    width: 40px !important;
+    height: 41px !important;
+  }
+}
+
 @media (max-width: 768px) {
   .breadcrumb {
     left: 16px;

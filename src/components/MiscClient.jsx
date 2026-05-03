@@ -253,12 +253,12 @@ export default function MiscClient() {
               <div className="gear-grid">
                 {[
                   { name: "Spotify", sub: "Go to music app", icon: "spotify" },
-                  { name: "Aquile Reader", sub: "My favorite book reader", icon: "aquile" },
+                  { name: "Aquile Reader", sub: "Favorite book reader", icon: "aquile" },
                   { name: "Notion", sub: "Everyday to-do list", icon: "notion" },
-                  { name: "Claude", sub: "Helps me think things through", icon: "claude" },
+                  { name: "Claude", sub: "Thinking things through", icon: "claude" },
                   { name: "VSCode", sub: "Where I build things", icon: "vscode" },
                   { name: "Canva", sub: "Quick visuals and layouts", icon: "canva" },
-                  { name: "Catppuccin", sub: "Dark pastel theme for VSCode", icon: "catppuccin" },
+                  { name: "Catppuccin", sub: "Dark theme for VSCode", icon: "catppuccin" },
                   { name: "Wise", sub: "Personal finance app", icon: "wise" },
                 ].map(({ name, sub, icon }) => (
                   <div key={name} className="gear-item">
