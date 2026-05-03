@@ -39,7 +39,6 @@ export default function useReveal() {
       };
     };
 
-    // opacity delayyy
     const timer = setTimeout(init, 300);
     return () => clearTimeout(timer);
   }, []);

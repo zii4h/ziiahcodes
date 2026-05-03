@@ -1,49 +1,53 @@
-import { useState, useEffect, useRef } from 'react';
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import { MdOpenInNew } from "react-icons/md";
 
-const LASTFM_USER = 'sophziah';
-const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
+const LASTFM_USER = "sophziah";
+// NOTE: In Next.js, client-side env vars must be prefixed with NEXT_PUBLIC_
+// Rename VITE_LASTFM_API_KEY to NEXT_PUBLIC_LASTFM_API_KEY in your .env file
+const LASTFM_API_KEY = process.env.NEXT_PUBLIC_LASTFM_API_KEY;
 
 const TABS = [
-  { key: 'albums',  label: 'Top Albums',  method: 'user.gettopalbums'  },
-  { key: 'artists', label: 'Top Artists', method: 'user.gettopartists' },
-  { key: 'tracks',  label: 'Top Tracks',  method: 'user.gettoptracks'  },
+  { key: "albums", label: "Top Albums", method: "user.gettopalbums" },
+  { key: "artists", label: "Top Artists", method: "user.gettopartists" },
+  { key: "tracks", label: "Top Tracks", method: "user.gettoptracks" },
 ];
 
 function extractLfmImage(imageArr) {
   if (!imageArr?.length) return null;
-  const preferred = ['extralarge', 'large', 'medium', 'small'];
+  const preferred = ["extralarge", "large", "medium", "small"];
   for (const size of preferred) {
-    const found = imageArr.find(i => i.size === size)?.['#text'];
-    if (found && found.trim() !== '') return found;
+    const found = imageArr.find((i) => i.size === size)?.["#text"];
+    if (found && found.trim() !== "") return found;
   }
-  const any = imageArr.find(i => i['#text'] && i['#text'].trim() !== '');
-  return any?.['#text'] || null;
+  const any = imageArr.find((i) => i["#text"] && i["#text"].trim() !== "");
+  return any?.["#text"] || null;
 }
 
 function parseItems(tab, data) {
-if (tab === 'artists') {
-  return (data.topartists?.artist || []).map(a => ({
-    name:   a.name,
-    sub:    '',
-    plays:  Number(a.playcount).toLocaleString(),
-    image:  null,
-  }));
-}
-  if (tab === 'albums') {
-    return (data.topalbums?.album || []).map(a => ({
-      name:   a.name,
-      sub:    a.artist?.name || null,
-      plays:  Number(a.playcount).toLocaleString(),
-      image:  extractLfmImage(a.image),
+  if (tab === "artists") {
+    return (data.topartists?.artist || []).map((a) => ({
+      name: a.name,
+      sub: "",
+      plays: Number(a.playcount).toLocaleString(),
+      image: null,
     }));
   }
-  if (tab === 'tracks') {
-    return (data.toptracks?.track || []).map(a => ({
-      name:   a.name,
-      sub:    a.artist?.name || null,
-      plays:  Number(a.playcount).toLocaleString(),
-      image:  null,
+  if (tab === "albums") {
+    return (data.topalbums?.album || []).map((a) => ({
+      name: a.name,
+      sub: a.artist?.name || null,
+      plays: Number(a.playcount).toLocaleString(),
+      image: extractLfmImage(a.image),
+    }));
+  }
+  if (tab === "tracks") {
+    return (data.toptracks?.track || []).map((a) => ({
+      name: a.name,
+      sub: a.artist?.name || null,
+      plays: Number(a.playcount).toLocaleString(),
+      image: null,
     }));
   }
   return [];
@@ -51,67 +55,138 @@ if (tab === 'artists') {
 
 function SkeletonRow({ showImage }) {
   return (
-    <div className="artist-row" style={{ opacity: 0.4, display: 'flex', alignItems: 'center', gap: '8px' }}>
-      {showImage && <div style={{ width: 28, height: 28, borderRadius: 4, background: 'var(--border2)', flexShrink: 0 }} />}
-      <div style={{ background: 'var(--border2)', borderRadius: 3, width: 14, height: 10, flexShrink: 0 }} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
-        <div style={{ background: 'var(--border2)', borderRadius: 3, height: 11, width: '55%' }} />
-        <div style={{ background: 'var(--border2)', borderRadius: 3, height: 9,  width: '35%' }} />
+    <div
+      className="artist-row"
+      style={{ opacity: 0.4, display: "flex", alignItems: "center", gap: "8px" }}
+    >
+      {showImage && (
+        <div
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 4,
+            background: "var(--border2)",
+            flexShrink: 0,
+          }}
+        />
+      )}
+      <div
+        style={{
+          background: "var(--border2)",
+          borderRadius: 3,
+          width: 14,
+          height: 10,
+          flexShrink: 0,
+        }}
+      />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+        }}
+      >
+        <div
+          style={{
+            background: "var(--border2)",
+            borderRadius: 3,
+            height: 11,
+            width: "55%",
+          }}
+        />
+        <div
+          style={{
+            background: "var(--border2)",
+            borderRadius: 3,
+            height: 9,
+            width: "35%",
+          }}
+        />
       </div>
-      <div style={{ background: 'var(--border2)', borderRadius: 3, width: 40, height: 10, flexShrink: 0 }} />
+      <div
+        style={{
+          background: "var(--border2)",
+          borderRadius: 3,
+          width: 40,
+          height: 10,
+          flexShrink: 0,
+        }}
+      />
     </div>
   );
 }
 
 function ItemRow({ item, index, showImage }) {
-  const isTopArtist = !item.sub || item.sub === ''; 
-  
+  const isTopArtist = !item.sub || item.sub === "";
+
   return (
-    <div className="artist-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <span className="artist-rank" style={{ flexShrink: 0 }}>#{index + 1}</span>
+    <div className="artist-row" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <span className="artist-rank" style={{ flexShrink: 0 }}>
+        #{index + 1}
+      </span>
       {showImage && (
-        <div style={{
-          width: 28, height: 28, borderRadius: 4,
-          background: 'var(--border2)', flexShrink: 0, overflow: 'hidden',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 10, color: 'var(--text3)',
-        }}>
-          {item.image
-            ? <img src={item.image} alt={item.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                onError={e => { e.currentTarget.style.display = 'none'; }} />
-            : '♪'}
+        <div
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 4,
+            background: "var(--border2)",
+            flexShrink: 0,
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 10,
+            color: "var(--text3)",
+          }}
+        >
+          {item.image ? (
+            <img
+              src={item.image}
+              alt={item.name}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          ) : (
+            "♪"
+          )}
         </div>
       )}
 
-     
-
       <div className="artist-info" style={{ flex: 1, minWidth: 0 }}>
-        <div className="artist-name" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div
+          className="artist-name"
+          style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+        >
           {item.name}
         </div>
-
-        {/* subtext for top artists*/}
-        <div 
+        <div
           style={{
-            fontSize: 9, 
-            textAlign: 'left',
-            color: 'var(--text3)', 
-            whiteSpace: 'nowrap', 
-            overflow: 'hidden', 
-            textOverflow: 'ellipsis', 
+            fontSize: 9,
+            textAlign: "left",
+            color: "var(--text3)",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
             marginTop: 1,
-            minHeight: '14px', 
-            borderRadius: '3px', 
-            padding: '0px 0px',
-           
+            minHeight: "14px",
+            borderRadius: "3px",
+            padding: "0px 0px",
           }}
         >
-          {isTopArtist ? 'Top Artist' : item.sub || ''} 
+          {isTopArtist ? "Top Artist" : item.sub || ""}
         </div>
       </div>
 
-      <div className="artist-plays" style={{ flexShrink: 0, marginLeft: 8, textAlign: 'right' }}>
+      <div className="artist-plays" style={{ flexShrink: 0, marginLeft: 8, textAlign: "right" }}>
         {item.plays} plays
       </div>
     </div>
@@ -127,44 +202,64 @@ function TabBtn({ tab, active, onClick }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: 'none', border: 'none', cursor: 'pointer',
+        background: "none",
+        border: "none",
+        cursor: "pointer",
         fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 10, fontWeight: 700, letterSpacing: '0.8px',
-        textTransform: 'uppercase',
-        color: active ? 'var(--text)' : 'var(--text3)',
-        padding: '1px 0 1px',
-        display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3,
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: "0.8px",
+        textTransform: "uppercase",
+        color: active ? "var(--text)" : "var(--text3)",
+        padding: "1px 0 1px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        gap: 3,
         flexShrink: 0,
-        transition: 'color 0.2s',
-        
+        transition: "color 0.2s",
       }}
     >
       <span>{tab.label}</span>
-      <span style={{
-        display: 'block', height: 1, width: '100%', borderRadius: 2,
-        background: active ? 'var(--link-lastfm)' : hovered ? 'var(--link-lastfm-hovered)' : 'var(--border2)',
-        transition: 'background 0.2s',
-      }} />
+      <span
+        style={{
+          display: "block",
+          height: 1,
+          width: "100%",
+          borderRadius: 2,
+          background: active
+            ? "var(--link-lastfm)"
+            : hovered
+            ? "var(--link-lastfm-hovered)"
+            : "var(--border2)",
+          transition: "background 0.2s",
+        }}
+      />
     </button>
   );
 }
 
 export default function LastFmCard() {
-  const [activeTab, setActiveTab] = useState('albums');
+  const [activeTab, setActiveTab] = useState("albums");
   const [totalScrobbles, setTotal] = useState(null);
-  const [loading, setLoading]     = useState(true);
-  const [items, setItems]         = useState([]);
-  const cacheRef                  = useRef({});
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
+  const cacheRef = useRef({});
 
-  const isReal = LASTFM_API_KEY && LASTFM_API_KEY !== 'YOUR_LASTFM_API_KEY';
-  const showImage = activeTab === 'albums';
+  const isReal = LASTFM_API_KEY && LASTFM_API_KEY !== "YOUR_LASTFM_API_KEY";
+  const showImage = activeTab === "albums";
 
   useEffect(() => {
-    if (!isReal) { setTotal('24,775'); return; }
-    fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json`)
-      .then(r => r.json())
-      .then(d => setTotal(Number(d.user?.playcount).toLocaleString() || '—'))
-      .catch(() => setTotal('—'));
+    if (!isReal) {
+      setTotal("24,775");
+      return;
+    }
+    fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json`
+    )
+      .then((r) => r.json())
+      .then((d) => setTotal(Number(d.user?.playcount).toLocaleString() || "—"))
+      .catch(() => setTotal("—"));
   }, []);
 
   useEffect(() => {
@@ -179,19 +274,19 @@ export default function LastFmCard() {
     if (!isReal) {
       const DEMO = {
         artists: [
-          { name: 'Radiohead',  sub: null,          plays: '669', image: null },
-          { name: 'John Mayer', sub: null,          plays: '517', image: null },
-          { name: 'Enigma',     sub: null,          plays: '501', image: null },
+          { name: "Radiohead", sub: null, plays: "669", image: null },
+          { name: "John Mayer", sub: null, plays: "517", image: null },
+          { name: "Enigma", sub: null, plays: "501", image: null },
         ],
         albums: [
-          { name: 'In Rainbows', sub: 'Radiohead',  plays: '312', image: null },
-          { name: 'Continuum',   sub: 'John Mayer', plays: '278', image: null },
-          { name: 'MCMXC a.D.', sub: 'Enigma',     plays: '210', image: null },
+          { name: "In Rainbows", sub: "Radiohead", plays: "312", image: null },
+          { name: "Continuum", sub: "John Mayer", plays: "278", image: null },
+          { name: "MCMXC a.D.", sub: "Enigma", plays: "210", image: null },
         ],
         tracks: [
-          { name: 'Karma Police',                   sub: 'Radiohead',  plays: '89', image: null },
-          { name: 'Slow Dancing in a Burning Room', sub: 'John Mayer', plays: '74', image: null },
-          { name: 'Sadeness Pt. I',                 sub: 'Enigma',     plays: '68', image: null },
+          { name: "Karma Police", sub: "Radiohead", plays: "89", image: null },
+          { name: "Slow Dancing in a Burning Room", sub: "John Mayer", plays: "74", image: null },
+          { name: "Sadeness Pt. I", sub: "Enigma", plays: "68", image: null },
         ],
       };
       setTimeout(() => {
@@ -202,55 +297,86 @@ export default function LastFmCard() {
       return;
     }
 
-    const tabCfg = TABS.find(t => t.key === activeTab);
+    const tabCfg = TABS.find((t) => t.key === activeTab);
     fetch(
       `https://ws.audioscrobbler.com/2.0/?method=${tabCfg.method}&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=3&period=3month`
     )
-      .then(r => r.json())
-      .then(data => {
+      .then((r) => r.json())
+      .then((data) => {
         const parsed = parseItems(activeTab, data);
         cacheRef.current[activeTab] = parsed;
         setItems(parsed);
         setLoading(false);
       })
-      .catch(() => { setItems([]); setLoading(false); });
+      .catch(() => {
+        setItems([]);
+        setLoading(false);
+      });
   }, [activeTab]);
 
   return (
     <>
-      {/* Tab nav */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 2 }}>
-        {TABS.map(tab => (
-          <TabBtn key={tab.key} tab={tab} active={activeTab === tab.key} onClick={() => setActiveTab(tab.key)} />
+      <div style={{ display: "flex", gap: 12, marginBottom: 2 }}>
+        {TABS.map((tab) => (
+          <TabBtn
+            key={tab.key}
+            tab={tab}
+            active={activeTab === tab.key}
+            onClick={() => setActiveTab(tab.key)}
+          />
         ))}
       </div>
 
-      {/* List */}
       <div className="artist-list">
         {loading
-          ? [1, 2, 3].map(i => <SkeletonRow key={i} showImage={showImage} />)
-          : items.map((item, i) => <ItemRow key={`${item.name}-${i}`} item={item} index={i} showImage={showImage} />)
-        }
+          ? [1, 2, 3].map((i) => <SkeletonRow key={i} showImage={showImage} />)
+          : items.map((item, i) => (
+              <ItemRow key={`${item.name}-${i}`} item={item} index={i} showImage={showImage} />
+            ))}
       </div>
 
-      {/* Footer */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 4,
+        }}
+      >
         <a
-            href={`https://www.last.fm/user/${LASTFM_USER}`}
-            target="_blank" rel="noreferrer"
-            className="lfm-redirect"
+          href={`https://www.last.fm/user/${LASTFM_USER}`}
+          target="_blank"
+          rel="noreferrer"
+          className="lfm-redirect"
         >
-            {LASTFM_USER} <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', transition: 'transform 0.2s ease' }}>
-  <path d="M5 12h14M13 6l6 6-6 6"/>
-</svg>
+          {LASTFM_USER}{" "}
+          <svg
+            viewBox="0 0 24 24"
+            width="10"
+            height="10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ verticalAlign: "middle", transition: "transform 0.2s ease" }}
+          >
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </a>
 
         {totalScrobbles && (
-            <a className="lfm-total" href={`https://www.last.fm/user/${LASTFM_USER}`} target="_blank" rel="noreferrer" style={{ marginTop: 0 }}>
-            total scrobbles — <span>{totalScrobbles}</span> 
-            </a>
+          <a
+            className="lfm-total"
+            href={`https://www.last.fm/user/${LASTFM_USER}`}
+            target="_blank"
+            rel="noreferrer"
+            style={{ marginTop: 0 }}
+          >
+            total scrobbles — <span>{totalScrobbles}</span>
+          </a>
         )}
-        </div>
+      </div>
     </>
   );
 }
