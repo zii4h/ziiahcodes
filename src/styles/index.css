@@ -222,6 +222,19 @@ img {
   stroke-linejoin: round;
 }
 
+
+.breadcrumb-home svg,
+.breadcrumb-current svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
 .breadcrumb-sep {
   color: var(--text3);
   font-size: 16px;
