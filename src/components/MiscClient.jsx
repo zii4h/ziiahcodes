@@ -14,7 +14,7 @@ const PHOTOS = [
   "/photos/photo5.jpg",
 ];
 
-const FALLBACK_COLORS = ["#2d3561", "#a53860", "#1b4332", "#7b2d8b", "#b5451b"];
+const FALLBACK_COLORS = ["#2a2a2a", "#3a3a3a", "#222222", "#333333", "#2f2f2f"];
 
 function DraggablePhotoStack() {
   const stackRef = useRef(null);

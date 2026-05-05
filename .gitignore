@@ -28,3 +28,7 @@ dist-ssr
 
 # seo keywords
 src/app/seo.js
+
+# Next.js build output
+.next/
+out/
