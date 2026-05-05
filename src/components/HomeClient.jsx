@@ -345,16 +345,16 @@ export default function HomeClient() {
               <div className="hero-socials">
                 <span className="connect-text"></span>
                 <div className="social-icons">
-                  <a href="mailto:sophykeziah@gmail.com" target="_blank" rel="noreferrer">
+                  <a href="mailto:sophykeziah@gmail.com" target="_blank" rel="noreferrer" aria-label="Email">
                     <i className="fas fa-envelope"></i>
                   </a>
-                  <a href="https://github.com/zii4h" target="_blank" rel="noreferrer">
+                  <a href="https://github.com/zii4h" target="_blank" rel="noreferrer" aria-label="GitHub">
                     <i className="fab fa-github"></i>
                   </a>
-                  <a href="https://linkedin.com/in/sophiakeziahpineda" target="_blank" rel="noreferrer">
+                  <a href="https://linkedin.com/in/sophiakeziahpineda" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                     <i className="fab fa-linkedin"></i>
                   </a>
-                  <a href="https://threads.net/@sphy.keziah" target="_blank" rel="noreferrer">
+                  <a href="https://threads.net/@sphy.keziah" target="_blank" rel="noreferrer" aria-label="Threads">
                     <i className="fab fa-threads"></i>
                   </a>
                 </div>
@@ -457,19 +457,19 @@ export default function HomeClient() {
           </h2>
           <p className="contact-desc">
             Thanks for stopping by! Reach me on my{" "}
-            <a href="#" className="underline link-blue">
+            <a href="https://threads.net/@sphy.keziah" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="Threads">
               Threads
             </a>
             ,{" "}
-            <a href="#" className="underline link-blue">
+            <a href="https://discordapp.com/users/829753058082553887" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="Discord">
               Discord
             </a>
             ,{" "}
-            <a href="#" className="underline link-blue">
+            <a href="https://linkedin.com/in/sophiakeziahpineda" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="LinkedIn">
               LinkedIn
             </a>
             , or{" "}
-            <a href="mailto:your@email.com" className="underline link-blue">
+            <a href="mailto:sophykeziah@gmail.com" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="Email">
               email!
             </a>{" "}
             <br />
