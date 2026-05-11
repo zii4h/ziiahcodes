@@ -3,8 +3,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { useLanyard } from "react-use-lanyard";
 
-// NOTE: In Next.js, client-side env vars must be prefixed with NEXT_PUBLIC_
-// Rename VITE_DISCORD_ID to NEXT_PUBLIC_DISCORD_ID in your .env file
 const USER_ID = process.env.NEXT_PUBLIC_DISCORD_ID;
 
 const STATUS_COLORS = {
@@ -14,21 +12,66 @@ const STATUS_COLORS = {
   offline: "#747f8d",
 };
 
-const StatusDot = ({ status }) => (
-  <span
-    style={{
-      display: "block",
-      width: 14,
-      height: 14,
-      borderRadius: "50%",
-      background: STATUS_COLORS[status] ?? STATUS_COLORS.offline,
-      border: "2px solid var(--card-bg)",
-      position: "absolute",
-      bottom: 1,
-      right: 1,
-    }}
-  />
-);
+const StatusDot = ({ status }) => {
+  const base = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 14,
+    height: 14,
+    borderRadius: "50%",
+    border: "2px solid var(--card-bg)",
+    position: "absolute",
+    bottom: 1,
+    right: 1,
+    
+  };
+
+  if (status === "online") {
+    return <span style={{ ...base, background: "#3ba55d" }} />;
+  }
+
+
+  if (status === "idle") {
+  return (
+    <span style={{ ...base, background: "#faa81a", position: "absolute", bottom: 1, right: 1, overflow: "visible" }}>
+      <span style={{
+        position: "absolute",
+        top: -3,
+        left: -3,
+        width: 10,
+        height: 10,
+        borderRadius: "50%",
+        background: "var(--card-bg)",
+      }} />
+    </span>
+  );
+}
+
+if (status === "dnd") {
+  return (
+    <span style={{ ...base, background: "#ed4245" }}>
+      <span style={{
+        width: 8,
+        height: 2,
+        borderRadius: 2,
+        background: "var(--card-bg)",
+      }} />
+    </span>
+  );
+}
+
+  return (
+    <span style={{ ...base, background: "#747f8d" }}>
+      <span style={{
+        width: 6,
+        height: 6,
+        borderRadius: "50%",
+        background: "var(--card-bg)",
+      }} />
+    </span>
+  );
+};
 
 const formatTime = (ms) => {
   const s = Math.floor(ms / 1000);
@@ -318,7 +361,6 @@ function DiscordPresenceInner() {
             <StatusDot status={status} />
           </div>
           <div style={{ marginBottom: 4 }}>
-            {/* discord_badge imported as SVG — keep the file in src/assets/ */}
             <img src="/discord_badge.svg" alt="badge" className="discord-badge" />
           </div>
         </div>
