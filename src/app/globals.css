@@ -487,17 +487,17 @@ html {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  overflow: hidden;        /* this makes it crop into a circle */
+  overflow: hidden;        
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #111;        /* optional */
+  background: #111;        
 }
 
 .entry-logo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;       /* fills the circle nicely */
+  object-fit: cover;      
 }
 .entry-info {
   flex: 1;
@@ -1280,15 +1280,6 @@ html, body, .page {
   gap: 8px;
 }
 
-  /* Last.fm */
-.artist-list {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-top: 0;
-  flex: 0; /* note: makes the top scrobbles UNDER the list, not too low*/
-  justify-content: flex-start;
-}
 
 .artist-row {
   display: flex;
@@ -1301,7 +1292,7 @@ html, body, .page {
 }
 
 .artist-row:hover {
-  background: #49494936; /* very subtle white */
+  background: #49494936; 
 }
 
 .artist-rank {
@@ -1363,6 +1354,16 @@ html, body, .page {
 }
 
 /* ----- LAST.FM CARD ----- */
+
+  /* Last.fm */
+.artist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 0;
+  flex: 0; /* note: makes the top scrobbles UNDER the list, not too low*/
+  justify-content: flex-start;
+}
 
 /* total scrobbles */
 .lfm-total span {
@@ -1602,9 +1603,9 @@ html, body, .page {
   .card-location { grid-column: span 3; grid-row: 2; }
   .card-photos   { grid-column: span 3; grid-row: 2; }
   .card-freetime { grid-column: span 6; grid-row: 3; }
-  .card-enjoy    { grid-column: span 6; grid-row: 4; }  /* was span 3 */
-  .card-stack    { grid-column: span 6; grid-row: 5; }  /* was span 3, now below */
-  .card-linkedin { grid-column: span 2; grid-row: 6; }  /* bumped down */
+  .card-enjoy    { grid-column: span 6; grid-row: 4; }  
+  .card-stack    { grid-column: span 6; grid-row: 5; } 
+  .card-linkedin { grid-column: span 2; grid-row: 6; }  
   .card-threads  { grid-column: span 2; grid-row: 6; }
   .card-github   { grid-column: span 2; grid-row: 6; }
   .git-bar       { grid-column: span 6; grid-row: 7; }

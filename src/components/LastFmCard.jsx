@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { MdOpenInNew } from "react-icons/md";
 
 const LASTFM_USER = "sophziah";
-// NOTE: In Next.js, client-side env vars must be prefixed with NEXT_PUBLIC_
-// Rename VITE_LASTFM_API_KEY to NEXT_PUBLIC_LASTFM_API_KEY in your .env file
 const LASTFM_API_KEY = process.env.NEXT_PUBLIC_LASTFM_API_KEY;
 
 const TABS = [
@@ -271,6 +269,7 @@ export default function LastFmCard() {
 
     setLoading(true);
 
+    /* TEST */
     if (!isReal) {
       const DEMO = {
         artists: [
