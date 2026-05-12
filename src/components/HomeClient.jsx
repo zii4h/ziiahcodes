@@ -478,7 +478,7 @@ export default function HomeClient() {
         </div>
 
         <span className="footer-note">
-          (C) 2026 Sophia Keziah.{" "}
+          © 2026 Sophia Keziah.{" "}
           <a
             href="https://github.com/zii4h/ziiahcodes"
             className="footer-link"

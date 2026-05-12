@@ -280,12 +280,15 @@ function DiscordPresenceInner() {
 
   const status = lanyard?.data?.discord_status ?? "offline";
 
-  const user = lanyard?.data?.discord_user;
-  const avatarUrl = user?.avatar
+ const user = lanyard?.data?.discord_user;
+   /*const avatarUrl = user?.avatar
     ? `https://cdn.discordapp.com/avatars/${USER_ID}/${user.avatar}.${
         user.avatar.startsWith("a_") ? "gif" : "png"
       }?size=128`
-    : `https://cdn.discordapp.com/embed/avatars/0.png`;
+    : `https://cdn.discordapp.com/embed/avatars/0.png`;*/
+    const avatarUrl = "/my-avatar.png";
+
+
 
   const cardStyle = {
     width: "clamp(160px, 30vw, 225px)",
@@ -352,13 +355,18 @@ function DiscordPresenceInner() {
               alt="avatar"
               width={55}
               height={55}
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
               style={{
+                pointerEvents: "none",
                 borderRadius: "50%",
                 border: "3px solid var(--card-bg)",
                 display: "block",
+                userSelect: "none",
+                WebkitUserDrag: "none",
               }}
             />
-            <StatusDot status={status} />
+                        <StatusDot status={status} />
           </div>
           <div style={{ marginBottom: 4 }}>
             <img src="/discord_badge.svg" alt="badge" className="discord-badge" />
