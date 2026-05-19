@@ -16,7 +16,7 @@ export default function HomeClient() {
 
   const skills = {
     "Libraries & Frameworks": ["ReactJS", "NextJS", "NodeJS", "ShadCN UI", "Astro", "Vanilla JS"],
-    "Tools & Platforms": ["GitHub", "Vite", "Vercel", "Docker", "Jira-Notion", "Figma", "Framer-Canva", "Affinity", "MS Office Tools"],
+    "Tools & Platforms": ["GitHub", "Kiro IDE", "Vite", "Vercel", "Docker", "Jira-Notion", "Figma", "Framer-Canva", "Affinity", "MS Office Tools"],
     "Programming Languages": ["JavaScript", "TypeScript", "Python", "Ruby", "HTML-CSS-JS"],
     "Database & Workbench": ["SQL", "MySQL", "Oracle", "Supabase / PostgreSQL", "XAMPP / phpMyAdmin", "Snowflake", "DataDog"],
     "Artificial Intelligence": ["Guardrails", "Claude", "OpenAI", "Ollama", "GPT-4"],
