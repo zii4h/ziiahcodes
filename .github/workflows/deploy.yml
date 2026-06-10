@@ -20,6 +20,9 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+        env:
+          NEXT_PUBLIC_DISCORD_ID: ${{ secrets.NEXT_PUBLIC_DISCORD_ID }}
+          NEXT_PUBLIC_LASTFM_API_KEY: ${{ secrets.NEXT_PUBLIC_LASTFM_API_KEY }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
