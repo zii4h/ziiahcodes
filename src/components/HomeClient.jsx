@@ -345,9 +345,22 @@ export default function HomeClient() {
               <div className="hero-socials">
                 <span className="connect-text"></span>
                 <div className="social-icons">
-                  <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" aria-label="Email">
-                    <i className="fas fa-envelope"></i>
-                  </a>
+                <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" aria-label="Email"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 7,
+                    outline: "1px solid rgba(187, 187, 187, 0.54)",
+                    border: "none",
+                    borderRadius: 4,
+                    padding: "3px 8px",
+                    fontSize: 16,
+                    opacity: 1,
+                  }}>
+                  <span style={{ fontSize: 13, whiteSpace: "nowrap" }}>say hi  &gt;&gt;</span>
+                  <i className="fas fa-envelope"></i>
+                </a>
+              
                   <a href="https://github.com/zii4h" target="_blank" rel="noreferrer" aria-label="GitHub">
                     <i className="fab fa-github"></i>
                   </a>
