@@ -335,7 +335,7 @@ export default function HomeClient() {
         <div className="hero reveal">
           <div className="hero-left">
             <div className="hero-text">
-              <h1 className="hero-name">Hi, I'm Ziah :)</h1>
+              <h1 className="hero-name">hi, ziah here.<span className="blink-cursor">|</span></h1>
               <p className="hero-bio">
                 - Data nerd with an SQL obsession.
                 <br />- Based in PH.
@@ -345,7 +345,7 @@ export default function HomeClient() {
               <div className="hero-socials">
                 <span className="connect-text"></span>
                 <div className="social-icons">
-                  <a href="mailto:sophykeziah@gmail.com" target="_blank" rel="noreferrer" aria-label="Email">
+                  <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" aria-label="Email">
                     <i className="fas fa-envelope"></i>
                   </a>
                   <a href="https://github.com/zii4h" target="_blank" rel="noreferrer" aria-label="GitHub">
@@ -410,7 +410,7 @@ export default function HomeClient() {
         {/* PROJECTS */}
         <div className="section reveal" id="projects">
           <div className="projects-header">
-            <div className="pill">MY PROJECTS</div>
+            <div className="pill">PROJECTS</div>
             <h2 className="big-title">Check out my latest works</h2>
             <p className="sub-desc">
               Projects I've built, learned from, and improved. <br />
@@ -469,7 +469,7 @@ export default function HomeClient() {
               LinkedIn
             </a>
             , or{" "}
-            <a href="mailto:sophykeziah@gmail.com" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="Email">
+            <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="Email">
               email!
             </a>{" "}
             <br />
