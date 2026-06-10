@@ -343,7 +343,7 @@ export default function HomeClient() {
                 <br />- I like food.
               </p>
               <div className="hero-socials">
-                <span className="connect-text"></span>
+                
                 <div className="social-icons">
                 <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" aria-label="Email"
                   style={{
