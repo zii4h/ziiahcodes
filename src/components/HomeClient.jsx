@@ -498,7 +498,8 @@ export default function HomeClient() {
             target="_blank"
             rel="noreferrer"
           >
-            Source
+            <i className="fab fa-github" style={{ fontSize: 11 }}></i>
+            Source.
           </a>
         </span>
       </div>

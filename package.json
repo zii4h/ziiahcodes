@@ -7,7 +7,7 @@
   "build": "next build",
   "start": "next start",
   "lint": "next lint",
-  "deploy": "gh-pages -d out --dotfiles"
+  "deploy": "gh-pages -d out --dotfiles -m 'latest build'"
 },
   "dependencies": {
     "next": "^15.3.1",
