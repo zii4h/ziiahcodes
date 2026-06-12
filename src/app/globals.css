@@ -1040,6 +1040,23 @@ a.dock-item {
   }
 }
 
+@media (max-width: 600px) {
+  .entry-sub {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    font-size: 12px;
+  }
+
+  .entry {
+    align-items: flex-start;
+  }
+
+  .entry-date {
+    align-self: flex-start;
+  }
+}
+
 @media (max-width: 600px) { /* mobile */
 .hero {
   gap: 12px;
