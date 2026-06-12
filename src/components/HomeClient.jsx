@@ -60,13 +60,21 @@ export default function HomeClient() {
   ];
 
   const designProjects = [
+
+    {
+      name: "Intranet Site", year: "Nov 2024 - Mar 2025",
+      desc: "Designed and developed a private intranet for NettWork Global Real Estate to streamline internal document access. Curious? Feel free to email me!",
+      tech: ["Figma", "Framer", "Framer CMS", "Wordpress", "Vimeo"],
+      links: [],
+      thumb: "/project-img/intranet.png",
+    },
     {
       name: "LoVi", year: "2025",
       desc: "Streams Lofi music with pixel interfaces and customizable ambience noise. Built for studying and relaxation.",
       tech: ["TypeScript", "JavaScript", "HTML"],
       links: [{ label: "Website", url: "https://lov1-pi.vercel.app/" }],
       thumb: "/project-img/lovi.png",
-    },
+    },  
   ];
 
   const certs = [
