@@ -64,7 +64,7 @@ export default function HomeClient() {
     {
       name: "Intranet Site", year: "Nov 2024 - Mar 2025",
       desc: "Designed and developed a private intranet for NettWork Global Real Estate to streamline internal document access. Curious? Feel free to email me!",
-      tech: ["Figma", "Framer", "Framer CMS", "Wordpress", "Vimeo"],
+      tech: ["Freelance Work", "Figma", "Framer", "Framer CMS", "Wordpress", "Vimeo"],
       links: [],
       thumb: "/project-img/intranet.png",
     },
