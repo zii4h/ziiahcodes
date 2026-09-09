@@ -374,7 +374,7 @@ function DiscordPresenceInner() {
         </div>
 
         {/* Name */}
-        <div className="profile-display-name">Zii4h 🦋</div>
+        <div className="profile-display-name">ziiah ♡</div>
         <div className="profile-username">@sphy.k</div>
 
         {/* Activity */}

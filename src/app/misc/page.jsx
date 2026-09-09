@@ -1,7 +1,7 @@
 import MiscClient from "@/components/MiscClient";
 
 export const metadata = {
-  title: "Misc | Ziah",
+  title: "Ziiah | Misc",
   description:
     "A bento-style miscellaneous page — music taste, photo stack, gear, and more from Sophia Keziah.",
 };
