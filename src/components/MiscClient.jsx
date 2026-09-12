@@ -392,8 +392,7 @@ export default function MiscClient() {
             </a>
 
             {/* Get in touch bar */}
-            <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" className="git-bar bento-col-3" aria-label="Email">
-              <div className="git-bar-left">
+<a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=ziiah.codes@gmail.com" onClick={(e) => { e.preventDefault(); window.open(e.currentTarget.href, "_blank", "width=900,height=700"); }} className="git-bar bento-col-3" aria-label="Email">              <div className="git-bar-left">
                 <div className="git-bar-icon">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />

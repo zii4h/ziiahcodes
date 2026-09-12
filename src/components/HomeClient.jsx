@@ -61,13 +61,7 @@ export default function HomeClient() {
 
   const designProjects = [
 
-    {
-      name: "Intranet Site", year: "Nov 2024 - Mar 2025",
-      desc: "Designed and developed a private intranet for NettWork Global Real Estate to streamline internal document access. Curious? Feel free to email me!",
-      tech: ["Freelance Work", "Figma", "Framer", "Framer CMS", "Wordpress", "Vimeo"],
-      links: [],
-      thumb: "/project-img/intranet.png",
-    },
+
     {
       name: "LoVi", year: "2025",
       desc: "Streams Lofi music with pixel interfaces and customizable ambience noise. Built for studying and relaxation.",
@@ -345,26 +339,30 @@ export default function HomeClient() {
             <div className="hero-text">
               <h1 className="hero-name">hi, ziah here.<span className="blink-cursor">|</span></h1>
               <p className="hero-bio">
-                - Data nerd with an SQL obsession.
-                <br />- Based in PH.
-                <br />- IDK what to write here.
-                <br />- I like food.
+                - Data nerd with an SQL obsession
+                <br />- Based in PH
+                <br />- Still updating this site 
               </p>
               <div className="hero-socials">
                 
                 <div className="social-icons">
-                <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" aria-label="Email"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    outline: "1px solid rgba(187, 187, 187, 0.54)",
-                    border: "none",
-                    borderRadius: 4,
-                    padding: "3px 8px",
-                    fontSize: 16,
-                    opacity: 1,
-                  }}>
+                <a
+                href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=ziiah.codes@gmail.com"
+                onClick={(e) => { e.preventDefault(); window.open(e.currentTarget.href, "_blank", "width=900,height=700"); }}
+                aria-label="Email"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  outline: "1px solid rgba(187, 187, 187, 0.54)",
+                  border: "none",
+                  borderRadius: 4,
+                  padding: "3px 8px",
+                  fontSize: 16,
+                  opacity: 1,
+                }}
+
+              >
                   <span style={{ fontSize: 13, whiteSpace: "nowrap" }}>say hi  &gt;&gt;</span>
                   <i className="fas fa-envelope"></i>
                 </a>
@@ -490,8 +488,7 @@ export default function HomeClient() {
               LinkedIn
             </a>
             , or{" "}
-            <a href="mailto:ziiah.codes@gmail.com" target="_blank" rel="noreferrer" className="underline link-blue" aria-label="Email">
-              email!
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ziiah.codes@gmail.com" onClick={(e) => { e.preventDefault(); window.open(e.currentTarget.href, "_blank", "width=900,height=700"); }} className="underline link-blue" aria-label="Email">              email!
             </a>{" "}
             <br />
             I'm always open to questions, ideas, or even random tech chats. :)
