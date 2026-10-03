@@ -38,16 +38,6 @@ export default function HomeClient() {
       thumb: "/project-img/jupyter.png",
     },
     {
-      name: "Shulte Table Game", year: "2025",
-      desc: "A number clicking game designed to improve focus and reaction speed by identifying numbers in sequence as quickly as possible.",
-      tech: ["Figma", "HTML", "CSS", "JavaScript"],
-      links: [
-        { label: "Demo", url: "https://zii4h.github.io/Schulte-Table-Game/" },
-        { label: "Source", url: "https://github.com/zii4h/Schulte-Table-Game" },
-      ],
-      thumb: "/project-img/Schulte.png",
-    },
-    {
       name: "CLIZiiah", year: "2025",
       desc: "A terminal-style interface that organizes and displays my personal links. Built as a project to learn TypeScript.",
       tech: ["TypeScript", "SCSS", "HTML"],
@@ -56,6 +46,16 @@ export default function HomeClient() {
         { label: "Source", url: "https://github.com/zii4h/CLIZiiah" },
       ],
       thumb: "/project-img/CLI.png",
+    },
+    {
+      name: "JOVA", year: "2026",
+      desc: "A mobile-first alternative to spreadsheets for organizing job applications, tracking hiring stages, and reviewing progress through analytics and AI-powered insights.",
+      tech: ["Flutter", "Dart", "Supabase", "Gemini AI Analysis"],
+      links: [
+        { label: "Demo", url: "https://zii4h.github.io/Jova/" },
+        { label: "Source", url: "https://github.com/zii4h/Jova" },
+      ],
+      thumb: "/project-img/jova-banner.png",
     },
   ];
 
@@ -69,6 +69,15 @@ export default function HomeClient() {
       links: [{ label: "Website", url: "https://lov1-pi.vercel.app/" }],
       thumb: "/project-img/lovi.png",
     },  
+    {
+      name: "Shulte Table Game", year: "2025",
+      desc: "A number clicking game designed to improve focus and reaction speed by identifying numbers in sequence as quickly as possible.",
+      tech: ["Figma", "HTML", "CSS", "JavaScript"],
+      links: [
+        { label: "Demo", url: "https://zii4h.github.io/Schulte-Table-Game/" },
+        { label: "Source", url: "https://github.com/zii4h/Schulte-Table-Game" },],
+      thumb: "/project-img/Schulte.png",
+    },
   ];
 
   const certs = [
