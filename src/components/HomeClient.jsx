@@ -55,7 +55,7 @@ export default function HomeClient() {
         { label: "Demo", url: "https://zii4h.github.io/Jova/" },
         { label: "Source", url: "https://github.com/zii4h/Jova" },
       ],
-      thumb: "/project-img/jova-banner.png",
+      thumb: "/project-img/jova.png",
     },
   ];
 
