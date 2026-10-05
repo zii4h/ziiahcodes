@@ -2,9 +2,17 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { MdOpenInNew } from "react-icons/md";
+import NavigationDock from "./NavigationDock";
 import LastFmCard from "./LastFmCard";
 import useReveal from "@/hooks/useReveal";
+
+const gmailComposeUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=ziiah.codes%40gmail.com";
+const emailAccountChooserUrl = `https://accounts.google.com/AccountChooser?service=mail&continue=${encodeURIComponent(gmailComposeUrl)}`;
+
+function openEmailAccountChooser(event) {
+  event.preventDefault();
+  window.open(emailAccountChooserUrl, "_blank", "noopener,noreferrer");
+}
 
 const PHOTOS = [
   "/photos/photo1.jpg",
@@ -16,6 +24,16 @@ const PHOTOS = [
 
 const FALLBACK_COLORS = ["#2a2a2a", "#3a3a3a", "#222222", "#333333", "#2f2f2f"];
 
+function CardArrow({ className = "bento-arrow" }) {
+  return (
+    <span className={className} aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M7 17 17 7M7 7h10v10" />
+      </svg>
+    </span>
+  );
+}
+
 function DraggablePhotoStack() {
   const stackRef = useRef(null);
 
@@ -24,14 +42,21 @@ function DraggablePhotoStack() {
     if (!stack) return;
 
     let cards = [];
+    let animating = false;
+    let animationTimeout;
+    const events = new AbortController();
+    const swipeDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300;
 
     function buildCards() {
       stack.innerHTML = "";
       cards = [];
 
       PHOTOS.forEach((src, i) => {
-        const el = document.createElement("div");
+        const el = document.createElement("button");
+        el.type = "button";
         el.className = "stack-card";
+        el.setAttribute("aria-label", "Show next photo");
+        el.disabled = i !== PHOTOS.length - 1;
 
         const offset = PHOTOS.length - 1 - i;
         const rot = (i % 2 === 0 ? 1 : -1) * (offset * 2.5);
@@ -56,7 +81,7 @@ function DraggablePhotoStack() {
       });
     }
 
-    function restack() {
+    function restack(resetCard) {
       cards.forEach((c, i) => {
         const isTop = i === cards.length - 1;
         const offset = cards.length - 1 - i;
@@ -64,66 +89,78 @@ function DraggablePhotoStack() {
         const tx = offset * 3;
         const ty = offset * 4;
         c.style.zIndex = i + 1;
-        c.style.transition = "transform .25s ease";
+        c.disabled = !isTop;
+        c.style.transition = swipeDuration === 0 || c === resetCard ? "none" : "transform .25s ease";
         c.style.transform = isTop
           ? "rotate(0deg) translate(0,0)"
           : `rotate(${rot}deg) translate(${tx}px,${ty}px)`;
       });
     }
 
-    function addDrag(el) {
-      let sx = 0, sy = 0, cx = 0, cy = 0, dragging = false;
-      const gx = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
-      const gy = (e) => (e.touches ? e.touches[0].clientY : e.clientY);
+    function swipeTopCard(el, x = 0, y = 0) {
+      if (animating || el !== cards[cards.length - 1]) return;
+      animating = true;
+      const restoreFocus = document.activeElement === el;
+      const dir = x < 0 ? -1 : 1;
+      el.style.transition = `transform ${swipeDuration}ms ease, opacity ${swipeDuration}ms ease`;
+      el.style.transform = `translate(${dir * 500}px,${y - 40}px) rotate(${dir * 20}deg)`;
+      el.style.opacity = "0";
+      animationTimeout = setTimeout(() => {
+        const removed = cards.pop();
+        cards.unshift(removed);
+        stack.insertBefore(removed, stack.firstChild);
+        removed.style.transition = "none";
+        removed.style.opacity = "1";
+        restack(removed);
+        animating = false;
+        if (restoreFocus) cards[cards.length - 1].focus({ preventScroll: true });
+      }, swipeDuration);
+    }
 
-      el.addEventListener("mousedown", start);
-      el.addEventListener("touchstart", start, { passive: true });
+    function addDrag(el) {
+      let sx = 0, sy = 0, cx = 0, cy = 0, pointerId, dragging = false, moved = false;
+      el.addEventListener("pointerdown", start, { signal: events.signal });
+      el.addEventListener("click", (e) => {
+        if (moved && e.detail !== 0) return;
+        swipeTopCard(el);
+      }, { signal: events.signal });
 
       function start(e) {
-        if (el !== cards[cards.length - 1]) return;
+        if (animating || el !== cards[cards.length - 1] || e.button !== 0) return;
         dragging = true;
+        moved = false;
+        pointerId = e.pointerId;
         cx = 0;
         cy = 0;
-        el.classList.add("dragging");
-        sx = gx(e);
-        sy = gy(e);
+        sx = e.clientX;
+        sy = e.clientY;
         el.style.transition = "none";
-        document.addEventListener("mousemove", move);
-        document.addEventListener("mouseup", end);
-        document.addEventListener("touchmove", move, { passive: false });
-        document.addEventListener("touchend", end);
+        document.addEventListener("pointermove", move, { signal: events.signal });
+        document.addEventListener("pointerup", end, { signal: events.signal });
+        document.addEventListener("pointercancel", end, { signal: events.signal });
       }
 
       function move(e) {
-        if (!dragging) return;
-        if (e.cancelable) e.preventDefault();
-        cx = gx(e) - sx;
-        cy = gy(e) - sy;
+        if (!dragging || e.pointerId !== pointerId) return;
+        cx = e.clientX - sx;
+        cy = e.clientY - sy;
+        if (Math.hypot(cx, cy) > 6) {
+          moved = true;
+          el.classList.add("dragging");
+        }
         el.style.transform = `translate(${cx}px,${cy}px) rotate(${cx * 0.08}deg)`;
       }
 
-      function end() {
-        if (!dragging) return;
+      function end(e) {
+        if (!dragging || e.pointerId !== pointerId) return;
         dragging = false;
         el.classList.remove("dragging");
-        document.removeEventListener("mousemove", move);
-        document.removeEventListener("mouseup", end);
-        document.removeEventListener("touchmove", move);
-        document.removeEventListener("touchend", end);
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", end);
+        document.removeEventListener("pointercancel", end);
 
-        if (Math.abs(cx) > 60 || Math.abs(cy) > 60) {
-          const dir = cx > 0 ? 1 : -1;
-          el.style.transition = "transform .35s ease, opacity .35s";
-          el.style.transform = `translate(${dir * 500}px,${cy - 80}px) rotate(${dir * 30}deg)`;
-          el.style.opacity = "0";
-          setTimeout(() => {
-            const removed = cards.pop();
-            cards.unshift(removed);
-            stack.insertBefore(removed, stack.firstChild);
-            removed.style.transition = "none";
-            removed.style.opacity = "1";
-            restack();
-          }, 350);
+        if (e.type !== "pointercancel" && (Math.abs(cx) > 60 || Math.abs(cy) > 60)) {
+          swipeTopCard(el, cx, cy);
         } else {
           restack();
         }
@@ -135,6 +172,8 @@ function DraggablePhotoStack() {
     buildCards();
 
     return () => {
+      events.abort();
+      clearTimeout(animationTimeout);
       stack.innerHTML = "";
     };
   }, []);
@@ -190,7 +229,7 @@ export default function MiscClient() {
           {/* bento grid */}
           <div className="bento-grid reveal">
             {/* Last.fm */}
-            <div className="bento-card bento-col-2 accent-blue card-lastfm">
+            <div className="bento-card bento-col-2 card-lastfm">
               <LastFmCard />
             </div>
 
@@ -201,7 +240,6 @@ export default function MiscClient() {
                 padding: 0,
                 overflow: "hidden",
                 width: "100%",
-                aspectRatio: "1 / 1",
                 background: "transparent",
                 border: "none",
               }}
@@ -239,7 +277,10 @@ export default function MiscClient() {
             </div>
 
             {/* free time */}
-            <div className="bento-card bento-col-2 card-freetime" style={{ borderStyle: "dashed" }}>
+            <div className="bento-card bento-col-2 card-freetime">
+              <svg className="thought-outline" aria-hidden="true">
+                <rect x="0.75" y="0.75" rx="5.25" />
+              </svg>
               <p className="info-text">
                 in my free time i like to read on <strong>reddit</strong>, <strong>threads</strong>{" "}
                 and on <strong>daily.dev</strong>! it's also how i stay updated with the latest
@@ -327,11 +368,7 @@ export default function MiscClient() {
                   <div className="bento-title" style={{ fontSize: "11px" }}>LinkedIn</div>
                   <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
                     <div className="bento-desc" style={{ fontSize: "10px", margin: 0 }}>view here</div>
-                    <span className="bento-arrow" style={{ display: "flex", alignSelf: "center" }}>
-                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </span>
+                    <CardArrow />
                   </div>
                 </div>
               </div>
@@ -353,11 +390,7 @@ export default function MiscClient() {
                   <div className="bento-title" style={{ fontSize: "11px" }}>Threads</div>
                   <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
                     <div className="bento-desc" style={{ fontSize: "10px", margin: 0 }}>@sphy.keziah</div>
-                    <span className="bento-arrow" style={{ display: "flex", alignSelf: "center" }}>
-                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </span>
+                    <CardArrow />
                   </div>
                 </div>
               </div>
@@ -381,53 +414,38 @@ export default function MiscClient() {
                   <div className="bento-title" style={{ fontSize: "11px" }}>GitHub</div>
                   <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
                     <div className="bento-desc" style={{ fontSize: "10px", margin: 0 }}>@zii4h</div>
-                    <span className="bento-arrow" style={{ display: "flex", alignSelf: "center" }}>
-                      <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                      </svg>
-                    </span>
+                    <CardArrow />
                   </div>
                 </div>
               </div>
             </a>
 
             {/* Get in touch bar */}
-<a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=ziiah.codes@gmail.com" onClick={(e) => { e.preventDefault(); window.open(e.currentTarget.href, "_blank", "width=900,height=700"); }} className="git-bar bento-col-3" aria-label="Email">              <div className="git-bar-left">
+            <a
+              href={emailAccountChooserUrl}
+              onClick={openEmailAccountChooser}
+              className="git-bar bento-col-3"
+              aria-label="Email"
+            >
+              <div className="git-bar-left">
                 <div className="git-bar-icon">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                     <polyline points="22,6 12,13 2,6" />
                   </svg>
                 </div>
-                <div style={{ alignSelf: "flex-end", lineHeight: 1.5 }}>
+                <div>
                   <div className="git-bar-title">Get in Touch</div>
                   <div className="git-bar-sub">Say Hi!</div>
                 </div>
               </div>
-              <span className="git-bar-arrow">
-                <MdOpenInNew />
-              </span>
+              <CardArrow className="git-bar-arrow" />
             </a>
           </div>
         </div>
       </div>
 
-      {/* FLOATING DOCK */}
-      <div className="dock">
-        <Link href="/" className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
-          </svg>
-          <span className="dock-tooltip">Home</span>
-        </Link>
-        <div className="dock-sep"></div>
-        <Link href="/misc" className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <path d="M4 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM4 15a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          <span className="dock-tooltip">Home Page</span>
-        </Link>
-      </div>
+      <NavigationDock activePage="misc" />
     </>
   );
 }

@@ -1,15 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { MdOpenInNew } from "react-icons/md";
 
 const LASTFM_USER = "sophziah";
 const LASTFM_API_KEY = process.env.NEXT_PUBLIC_LASTFM_API_KEY;
 
 const TABS = [
-  { key: "albums", label: "Top Albums", method: "user.gettopalbums" },
-  { key: "artists", label: "Top Artists", method: "user.gettopartists" },
-  { key: "tracks", label: "Top Tracks", method: "user.gettoptracks" },
+  { key: "albums", label: "Albums", method: "user.gettopalbums" },
+  { key: "artists", label: "Artists", method: "user.gettopartists" },
+  { key: "tracks", label: "Tracks", method: "user.gettoptracks" },
 ];
 
 function extractLfmImage(imageArr) {
@@ -53,102 +52,28 @@ function parseItems(tab, data) {
 
 function SkeletonRow({ showImage }) {
   return (
-    <div
-      className="artist-row"
-      style={{ opacity: 0.4, display: "flex", alignItems: "center", gap: "8px" }}
-    >
-      {showImage && (
-        <div
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: 4,
-            background: "var(--border2)",
-            flexShrink: 0,
-          }}
-        />
-      )}
-      <div
-        style={{
-          background: "var(--border2)",
-          borderRadius: 3,
-          width: 14,
-          height: 10,
-          flexShrink: 0,
-        }}
-      />
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          gap: 3,
-        }}
-      >
-        <div
-          style={{
-            background: "var(--border2)",
-            borderRadius: 3,
-            height: 11,
-            width: "55%",
-          }}
-        />
-        <div
-          style={{
-            background: "var(--border2)",
-            borderRadius: 3,
-            height: 9,
-            width: "35%",
-          }}
-        />
+    <li className="artist-row lfm-skeleton" aria-hidden="true">
+      <span className="artist-rank lfm-placeholder" />
+      {showImage && <span className="lfm-cover lfm-placeholder" />}
+      <div className="artist-info">
+        <span className="lfm-placeholder lfm-placeholder-name" />
+        <span className="lfm-placeholder lfm-placeholder-sub" />
       </div>
-      <div
-        style={{
-          background: "var(--border2)",
-          borderRadius: 3,
-          width: 40,
-          height: 10,
-          flexShrink: 0,
-        }}
-      />
-    </div>
+      <span className="lfm-placeholder lfm-placeholder-plays" />
+    </li>
   );
 }
 
 function ItemRow({ item, index, showImage }) {
-  const isTopArtist = !item.sub || item.sub === "";
-
   return (
-    <div className="artist-row" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <span className="artist-rank" style={{ flexShrink: 0 }}>
-        #{index + 1}
-      </span>
+    <li className="artist-row">
+      <span className="artist-rank">{String(index + 1).padStart(2, "0")}</span>
       {showImage && (
-        <div
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: 4,
-            background: "var(--border2)",
-            flexShrink: 0,
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 10,
-            color: "var(--text3)",
-          }}
-        >
+        <div className="lfm-cover" aria-hidden="true">
           {item.image ? (
             <img
               src={item.image}
-              alt={item.name}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
+              alt=""
               onError={(e) => {
                 e.currentTarget.style.display = "none";
               }}
@@ -158,81 +83,24 @@ function ItemRow({ item, index, showImage }) {
           )}
         </div>
       )}
-
-      <div className="artist-info" style={{ flex: 1, minWidth: 0 }}>
-        <div
-          className="artist-name"
-          style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
-        >
-          {item.name}
-        </div>
-        <div
-          style={{
-            fontSize: 9,
-            textAlign: "left",
-            color: "var(--text3)",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            marginTop: 1,
-            minHeight: "14px",
-            borderRadius: "3px",
-            padding: "0px 0px",
-          }}
-        >
-          {isTopArtist ? "Top Artist" : item.sub || ""}
-        </div>
+      <div className="artist-info">
+        <div className="artist-name" title={item.name}>{item.name}</div>
+        {item.sub && <div className="artist-sub">{item.sub}</div>}
       </div>
-
-      <div className="artist-plays" style={{ flexShrink: 0, marginLeft: 8, textAlign: "right" }}>
-        {item.plays} plays
-      </div>
-    </div>
+      <span className="artist-plays">{item.plays} plays</span>
+    </li>
   );
 }
 
 function TabBtn({ tab, active, onClick }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <button
+      type="button"
+      className="lfm-tab"
+      aria-pressed={active}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 10,
-        fontWeight: 700,
-        letterSpacing: "0.8px",
-        textTransform: "uppercase",
-        color: active ? "var(--text)" : "var(--text3)",
-        padding: "1px 0 1px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
-        gap: 3,
-        flexShrink: 0,
-        transition: "color 0.2s",
-      }}
     >
-      <span>{tab.label}</span>
-      <span
-        style={{
-          display: "block",
-          height: 1,
-          width: "100%",
-          borderRadius: 2,
-          background: active
-            ? "var(--link-lastfm)"
-            : hovered
-            ? "var(--link-lastfm-hovered)"
-            : "var(--border2)",
-          transition: "background 0.2s",
-        }}
-      />
+      {tab.label}
     </button>
   );
 }
@@ -315,7 +183,7 @@ export default function LastFmCard() {
 
   return (
     <>
-      <div style={{ display: "flex", gap: 12, marginBottom: 2 }}>
+      <div className="lfm-tabs" role="group" aria-label="Top music rankings">
         {TABS.map((tab) => (
           <TabBtn
             key={tab.key}
@@ -326,29 +194,22 @@ export default function LastFmCard() {
         ))}
       </div>
 
-      <div className="artist-list">
+      <ol className="artist-list" aria-label={`Top ${activeTab}`} aria-busy={loading}>
         {loading
           ? [1, 2, 3].map((i) => <SkeletonRow key={i} showImage={showImage} />)
           : items.map((item, i) => (
               <ItemRow key={`${item.name}-${i}`} item={item} index={i} showImage={showImage} />
             ))}
-      </div>
+      </ol>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: 4,
-        }}
-      >
+      <div className="lfm-footer">
         <a
           href={`https://www.last.fm/user/${LASTFM_USER}`}
           target="_blank"
           rel="noreferrer"
           className="lfm-redirect"
         >
-          {LASTFM_USER}{" "}
+          recent activity
           <svg
             viewBox="0 0 24 24"
             width="10"
@@ -358,7 +219,7 @@ export default function LastFmCard() {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ verticalAlign: "middle", transition: "transform 0.2s ease" }}
+            aria-hidden="true"
           >
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
@@ -370,9 +231,8 @@ export default function LastFmCard() {
             href={`https://www.last.fm/user/${LASTFM_USER}`}
             target="_blank"
             rel="noreferrer"
-            style={{ marginTop: 0 }}
           >
-            total scrobbles — <span>{totalScrobbles}</span>
+            <span>{totalScrobbles}</span> scrobbles
           </a>
         )}
       </div>

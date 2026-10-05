@@ -3,12 +3,26 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import Link from "next/link";
 import useReveal from "@/hooks/useReveal";
+import NavigationDock from "./NavigationDock";
 
 const DiscordPresence = lazy(() => import("./DiscordPresence"));
+
+const gmailComposeUrl = "https://mail.google.com/mail/?view=cm&fs=1&to=ziiah.codes%40gmail.com";
+const emailAccountChooserUrl = `https://accounts.google.com/AccountChooser?service=mail&continue=${encodeURIComponent(gmailComposeUrl)}`;
+
+function openEmailAccountChooser(event) {
+  event.preventDefault();
+  window.open(emailAccountChooserUrl, "_blank", "noopener,noreferrer,width=900,height=700");
+}
 
 export default function HomeClient() {
   useReveal();
   const [activeTab, setActiveTab] = useState("dev");
+
+  const openEmailAccountChooser = (event) => {
+    event.preventDefault();
+    window.open(emailAccountChooserUrl, "_blank", "noopener,noreferrer");
+  };
   const stackRef = useRef(null);
   const skillsWrapRef = useRef(null);
   const projectsGridRef = useRef(null);
@@ -356,22 +370,11 @@ export default function HomeClient() {
                 
                 <div className="social-icons">
                 <a
-                href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=ziiah.codes@gmail.com"
-                onClick={(e) => { e.preventDefault(); window.open(e.currentTarget.href, "_blank", "width=900,height=700"); }}
-                aria-label="Email"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 7,
-                  outline: "1px solid rgba(187, 187, 187, 0.54)",
-                  border: "none",
-                  borderRadius: 4,
-                  padding: "3px 8px",
-                  fontSize: 16,
-                  opacity: 1,
-                }}
-
-              >
+                  href={emailAccountChooserUrl}
+                  onClick={openEmailAccountChooser}
+                  aria-label="Email"
+                  className="say-hi-button"
+                >
                   <span style={{ fontSize: 13, whiteSpace: "nowrap" }}>say hi  &gt;&gt;</span>
                   <i className="fas fa-envelope"></i>
                 </a>
@@ -497,7 +500,7 @@ export default function HomeClient() {
               LinkedIn
             </a>
             , or{" "}
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ziiah.codes@gmail.com" onClick={(e) => { e.preventDefault(); window.open(e.currentTarget.href, "_blank", "width=900,height=700"); }} className="underline link-blue" aria-label="Email">              email!
+            <a href={emailAccountChooserUrl} onClick={openEmailAccountChooser} className="underline link-blue" aria-label="Email">              email!
             </a>{" "}
             <br />
             I'm always open to questions, ideas, or even random tech chats. :)
@@ -518,22 +521,7 @@ export default function HomeClient() {
         </span>
       </div>
 
-      {/* FLOATING DOCK */}
-      <div className="dock">
-        <div className="dock-item" onClick={scrollToTop}>
-          <svg viewBox="0 0 24 24">
-            <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
-          </svg>
-          <span className="dock-tooltip">Home</span>
-        </div>
-        <div className="dock-sep"></div>
-        <Link href="/misc" className="dock-item">
-          <svg viewBox="0 0 24 24">
-            <path d="M4 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM4 15a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-          </svg>
-          <span className="dock-tooltip">Misc</span>
-        </Link>
-      </div>
+      <NavigationDock activePage="home" onHomeClick={scrollToTop} />
 
       <div
         className="lanyard-fixed"
@@ -550,3 +538,7 @@ export default function HomeClient() {
     </>
   );
 }
+
+
+
+
