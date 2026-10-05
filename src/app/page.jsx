@@ -1,10 +1,7 @@
 import HomeClient from "@/components/HomeClient";
+import { homeDescription, pageMetadata } from "@/lib/site";
 
-export const metadata = {
-  title: "Ziiah | Home",
-  description:
-    "Sophia Keziah (Ziah) — CS student and developer based in Pampanga, PH. Data nerd with an SQL obsession.",
-};
+export const metadata = pageMetadata("Ziiah | Home", homeDescription, "/");
 
 export default function HomePage() {
   return <HomeClient />;

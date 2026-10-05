@@ -33,4 +33,5 @@ src/app/seo.js
 
 # Next.js build output
 .next/
+.next-build/
 out/

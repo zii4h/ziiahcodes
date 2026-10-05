@@ -15,11 +15,11 @@ function openEmailAccountChooser(event) {
 }
 
 const PHOTOS = [
-  "/photos/photo1.jpg",
-  "/photos/photo2.jpg",
-  "/photos/photo3.jpg",
-  "/photos/photo4.jpg",
-  "/photos/photo5.jpg",
+  "/photos/photo1.webp",
+  "/photos/photo2.webp",
+  "/photos/photo3.webp",
+  "/photos/photo4.webp",
+  "/photos/photo5.webp",
 ];
 
 const FALLBACK_COLORS = ["#2a2a2a", "#3a3a3a", "#222222", "#333333", "#2f2f2f"];
@@ -41,45 +41,11 @@ function DraggablePhotoStack() {
     const stack = stackRef.current;
     if (!stack) return;
 
-    let cards = [];
+    const cards = [...stack.children];
     let animating = false;
     let animationTimeout;
     const events = new AbortController();
     const swipeDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300;
-
-    function buildCards() {
-      stack.innerHTML = "";
-      cards = [];
-
-      PHOTOS.forEach((src, i) => {
-        const el = document.createElement("button");
-        el.type = "button";
-        el.className = "stack-card";
-        el.setAttribute("aria-label", "Show next photo");
-        el.disabled = i !== PHOTOS.length - 1;
-
-        const offset = PHOTOS.length - 1 - i;
-        const rot = (i % 2 === 0 ? 1 : -1) * (offset * 2.5);
-        const tx = offset * 3;
-        const ty = offset * 4;
-
-        el.style.zIndex = i + 1;
-        el.style.transform = `rotate(${rot}deg) translate(${tx}px,${ty}px)`;
-        el.style.background = FALLBACK_COLORS[i % FALLBACK_COLORS.length];
-
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = `photo ${i + 1}`;
-        img.onerror = () => {
-          img.style.display = "none";
-        };
-
-        el.appendChild(img);
-        addDrag(el);
-        stack.appendChild(el);
-        cards.push(el);
-      });
-    }
 
     function restack(resetCard) {
       cards.forEach((c, i) => {
@@ -169,18 +135,29 @@ function DraggablePhotoStack() {
       }
     }
 
-    buildCards();
+    cards.forEach(addDrag);
+    restack();
 
     return () => {
       events.abort();
       clearTimeout(animationTimeout);
-      stack.innerHTML = "";
     };
   }, []);
 
   return (
     <div className="photo-stack-wrap">
-      <div className="photo-stack-inner" ref={stackRef} />
+      <div className="photo-stack-inner" ref={stackRef}>
+        {PHOTOS.map((src, i) => {
+          const offset = PHOTOS.length - 1 - i;
+          const rotation = (i % 2 === 0 ? 1 : -1) * offset * 2.5;
+          return (
+            <button type="button" className="stack-card" aria-label="Show next photo" disabled={offset !== 0} key={src}
+              style={{ zIndex: i + 1, transform: `rotate(${rotation}deg) translate(${offset * 3}px,${offset * 4}px)`, background: FALLBACK_COLORS[i] }}>
+              <img src={src} alt={`Photo ${i + 1} from Ziah's collection`} width="480" height="480" loading={offset === 0 ? "eager" : "lazy"} fetchPriority={offset === 0 ? "high" : "auto"} decoding="async" draggable={false} />
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -193,7 +170,7 @@ export default function MiscClient() {
 
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        <Link href="/" className="breadcrumb-home">
+        <Link href="/" className="breadcrumb-home" aria-label="Home">
           <svg viewBox="0 0 24 24" className="breadcrumb-icon">
             <path d="M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10" />
           </svg>
@@ -207,22 +184,10 @@ export default function MiscClient() {
         </span>
       </div>
 
-      {/* Nav toggle back to / */}
-      <Link
-        href="/"
-        className="theme-toggle"
-        style={{ '--toggle-rotation': '180deg' }}
-        title="Home"
-      >
-        <svg viewBox="0 0 24 24">
-          <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
-        </svg>
-      </Link>
-
       <div className="misc-shell">
-        <div className="misc-inner page">
+        <main className="misc-inner page" id="main-content">
           <div className="section reveal" style={{ marginBottom: "12px", flexShrink: 0 }}>
-            <p className="section-label">Miscellaneous Stuff</p>
+            <h1 className="section-label">Miscellaneous Stuff</h1>
             <p className="about-text">A place for things that don't have a place.</p>
           </div>
 
@@ -305,7 +270,9 @@ export default function MiscClient() {
                   <div key={name} className="gear-item">
                     <div className="gear-icon">
                       <img
-                        src={`/misc-gear-svg/${icon}.svg`}
+                        src={`/gear/${icon}.webp`}
+                        loading="lazy"
+                        decoding="async"
                         alt={name}
                         width="16"
                         height="16"
@@ -442,7 +409,7 @@ export default function MiscClient() {
               <CardArrow className="git-bar-arrow" />
             </a>
           </div>
-        </div>
+        </main>
       </div>
 
       <NavigationDock activePage="misc" />

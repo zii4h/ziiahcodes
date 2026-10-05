@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
-import Link from "next/link";
+import { useState, useCallback, lazy, Suspense } from "react";
 import useReveal from "@/hooks/useReveal";
 import NavigationDock from "./NavigationDock";
+import ProjectGrid from "./ProjectGrid";
 
 const DiscordPresence = lazy(() => import("./DiscordPresence"));
 
@@ -15,25 +15,12 @@ function openEmailAccountChooser(event) {
   window.open(emailAccountChooserUrl, "_blank", "noopener,noreferrer,width=900,height=700");
 }
 
-export default function HomeClient() {
-  useReveal();
-  const [activeTab, setActiveTab] = useState("dev");
-
-  const openEmailAccountChooser = (event) => {
-    event.preventDefault();
-    window.open(emailAccountChooserUrl, "_blank", "noopener,noreferrer");
-  };
-  const stackRef = useRef(null);
-  const skillsWrapRef = useRef(null);
-  const projectsGridRef = useRef(null);
-  const certsGridRef = useRef(null);
-
   const skills = {
     "Libraries & Frameworks": ["ReactJS", "NextJS", "NodeJS", "ShadCN UI", "Astro", "Vanilla JS"],
     "Tools & Platforms": ["GitHub", "Kiro IDE", "Vite", "Vercel", "Docker", "Jira-Notion", "Figma", "Framer-Canva", "Affinity", "MS Office Tools"],
     "Programming Languages": ["JavaScript", "TypeScript", "Python", "Ruby", "HTML-CSS-JS"],
     "Database & Workbench": ["SQL", "MySQL", "Oracle", "Supabase / PostgreSQL", "XAMPP / phpMyAdmin", "Snowflake", "DataDog"],
-    "Artificial Intelligence": ["Guardrails", "Claude", "OpenAI", "Ollama", "GPT-4"],
+    "Artificial Intelligence": ["OpenAI", "Claude", "Gemini", "Ollama", "MCP"], 
   };
 
   const devProjects = [
@@ -127,209 +114,12 @@ export default function HomeClient() {
     },
   ];
 
-  const switchTab = (tab, button) => {
-    setActiveTab(tab);
-    document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-    button.classList.add("active");
-  };
-
+export default function HomeClient() {
+  useReveal();
+  const [activeTab, setActiveTab] = useState("dev");
   const scrollToTop = useCallback(() => {
-    const start = window.scrollY;
-    const duration = 500;
-    let startTime = null;
-    const animation = (currentTime) => {
-      if (!startTime) startTime = currentTime;
-      const timeElapsed = currentTime - startTime;
-      const progress = Math.min(timeElapsed / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      window.scrollTo(0, start * (1 - ease));
-      if (progress < 1) requestAnimationFrame(animation);
-    };
-    requestAnimationFrame(animation);
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   }, []);
-
-  const scrollToProjects = () => {
-    setActiveTab("dev");
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToDesignProjects = () => {
-    setActiveTab("design");
-    const el = document.getElementById("projects");
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  useEffect(() => {
-    const stack = stackRef.current;
-    if (!stack) return;
-    let cards = [];
-
-    const buildCards = () => {
-      stack.innerHTML = "";
-      cards = [];
-      const cardData = [
-        { type: "coffee", bg: "#c8a882", label: "hello!!!" },
-        { type: "code", bg: "#1e1e2e", label: "</>aaa" },
-        { type: "stats", bg: "#1a2a4a", label: "idk what is this" },
-      ];
-      cardData.forEach((d, i) => {
-        const el = document.createElement("div");
-        el.className = "stack-card";
-        const offset = cardData.length - 1 - i;
-        const rot = (i % 2 === 0 ? 1 : -1) * (offset * 2.5);
-        const tx = offset * 3,
-          ty = offset * 4;
-        el.dataset.rot = rot;
-        el.dataset.tx = tx;
-        el.dataset.ty = ty;
-        el.style.cssText = `z-index:${i + 1};transform:rotate(${rot}deg) translate(${tx}px,${ty}px);`;
-        el.style.background = d.bg;
-        el.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:flex-end;padding:12px"><span style="color:rgba(255,255,255,0.9);font-size:11px;font-weight:600">${d.label}</span></div>`;
-        addDrag(el);
-        stack.appendChild(el);
-        cards.push(el);
-      });
-    };
-
-    function addDrag(el) {
-      let startX = 0, startY = 0, curX = 0, curY = 0, dragging = false;
-      const getX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
-      const getY = (e) => (e.touches ? e.touches[0].clientY : e.clientY);
-      el.addEventListener("mousedown", start);
-      el.addEventListener("touchstart", start, { passive: true });
-      function start(e) {
-        if (el !== cards[cards.length - 1]) return;
-        dragging = true;
-        el.classList.add("dragging");
-        startX = getX(e);
-        startY = getY(e);
-        el.style.transition = "none";
-        document.addEventListener("mousemove", move);
-        document.addEventListener("mouseup", end);
-        document.addEventListener("touchmove", move, { passive: false });
-        document.addEventListener("touchend", end);
-      }
-      function move(e) {
-        if (!dragging) return;
-        if (e.cancelable) e.preventDefault();
-        curX = getX(e) - startX;
-        curY = getY(e) - startY;
-        const rot = curX * 0.08;
-        el.style.transform = `translate(${curX}px,${curY}px) rotate(${rot}deg)`;
-      }
-      function end() {
-        if (!dragging) return;
-        dragging = false;
-        el.classList.remove("dragging");
-        document.removeEventListener("mousemove", move);
-        document.removeEventListener("mouseup", end);
-        document.removeEventListener("touchmove", move);
-        document.removeEventListener("touchend", end);
-        if (Math.abs(curX) > 60 || Math.abs(curY) > 60) {
-          const dir = curX > 0 ? 1 : -1;
-          el.style.transition = "transform .35s ease,opacity .35s";
-          el.style.transform = `translate(${dir * 500}px,${curY - 80}px) rotate(${dir * 30}deg)`;
-          el.style.opacity = "0";
-          setTimeout(() => {
-            const removed = cards.pop();
-            cards.unshift(removed);
-            stack.insertBefore(removed, stack.firstChild);
-            removed.style.transition = "none";
-            removed.style.opacity = "1";
-            restack();
-          }, 350);
-        } else {
-          restack();
-        }
-        curX = 0;
-        curY = 0;
-      }
-    }
-
-    function restack() {
-      cards.forEach((c, i) => {
-        const isTop = i === cards.length - 1;
-        const offset = cards.length - 1 - i;
-        const rot = (i % 2 === 0 ? 1 : -1) * (offset * 2.5);
-        const tx = offset * 3,
-          ty = offset * 4;
-        c.style.zIndex = i + 1;
-        if (isTop) {
-          c.style.transition = "transform .25s ease";
-          c.style.transform = "rotate(0deg) translate(0,0)";
-        } else {
-          c.style.transition = "transform .25s ease";
-          c.style.transform = `rotate(${rot}deg) translate(${tx}px,${ty}px)`;
-        }
-      });
-    }
-
-    buildCards();
-  }, []);
-
-  useEffect(() => {
-    if (skillsWrapRef.current) {
-      skillsWrapRef.current.innerHTML = Object.entries(skills)
-        .map(
-          ([category, tags]) => `
-          <div class="skills-category">
-            <span class="skills-category-label">${category}</span>
-            <div class="skills-tags-row">
-              ${tags.map((s) => `<span class="skill-tag">${s}</span>`).join("")}
-            </div>
-          </div>
-        `
-        )
-        .join("");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (certsGridRef.current) {
-      certsGridRef.current.innerHTML = certs
-        .map(
-          (c) => `
-        <div class="cert-card reveal">
-          <img class="cert-img" src="${c.img}" alt="${c.issuer} logo" onerror="this.style.display='none'" />
-          <div class="cert-name">${c.name}</div>
-          <div class="cert-issuer">${c.issuer}</div>
-          <div class="cert-date">${c.date}</div>
-        </div>
-      `
-        )
-        .join("");
-    }
-  }, []);
-
-  const currentProjects = activeTab === "dev" ? devProjects : designProjects;
-
-  useEffect(() => {
-    if (projectsGridRef.current && currentProjects.length > 0) {
-      projectsGridRef.current.innerHTML = currentProjects
-        .map(
-          (p) => `
-        <div class="project-card reveal">
-          <div class="project-thumb" style="${
-            p.thumb.startsWith("#")
-              ? `background-color:${p.thumb};`
-              : `background-image:url(${p.thumb}); background-size:cover; background-position:center;`
-          }"></div>
-          <div class="project-body">
-            <div class="project-name">${p.name}</div>
-            <div class="project-year">${p.year}</div>
-            <div class="project-desc">${p.desc}</div>
-            <div class="tech-wrap">${p.tech.map((t) => `<span class="tech-tag">${t}</span>`).join("")}</div>
-            <div class="project-links">
-              ${p.links.map((l) => `<a class="proj-link" href="${l.url}" target="_blank" rel="noreferrer">🌐 ${l.label}</a>`).join("")}
-            </div>
-          </div>
-        </div>
-      `
-        )
-        .join("");
-    }
-  }, [activeTab, currentProjects]);
 
   return (
     <>
@@ -344,19 +134,7 @@ export default function HomeClient() {
         </span>
       </div>
 
-      {/* Nav toggle to /misc */}
-      <Link
-        href="/misc"
-        className="theme-toggle"
-        style={{ '--toggle-rotation': '0deg' }}
-        title="Misc"
-      >
-        <svg viewBox="0 0 24 24">
-          <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
-        </svg>
-      </Link>
-
-      <div className="page">
+      <main className="page" id="main-content">
         <div className="hero reveal">
           <div className="hero-left">
             <div className="hero-text">
@@ -421,7 +199,7 @@ export default function HomeClient() {
           <div className="entry-list">
             <div className="entry">
               <div className="entry-logo">
-                <img src="/photos/hau-logo.png" alt="Holy Angel University logo" />
+                <img src="/photos/hau-logo.webp" alt="Holy Angel University logo" width="44" height="44" loading="lazy" decoding="async" />
               </div>
               <div className="entry-info">
                 <div className="entry-title">Holy Angel University</div>
@@ -435,7 +213,16 @@ export default function HomeClient() {
         {/* SKILLS */}
         <div className="section reveal">
           <p className="section-label">SKILLS</p>
-          <div className="skills-wrap" id="skills-wrap" ref={skillsWrapRef}></div>
+          <div className="skills-wrap" id="skills-wrap">
+            {Object.entries(skills).map(([category, tags]) => (
+              <div className="skills-category" key={category}>
+                <h3 className="skills-category-label">{category}</h3>
+                <div className="skills-tags-row">
+                  {tags.map((tag) => <span className="skill-tag" key={tag}>{tag}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* PROJECTS */}
@@ -452,19 +239,24 @@ export default function HomeClient() {
             <div className="tab-wrap">
               <button
                 className={`tab-btn ${activeTab === "dev" ? "active" : ""}`}
-                onClick={(e) => switchTab("dev", e.target)}
+                onClick={() => setActiveTab("dev")}
+                aria-pressed={activeTab === "dev"}
+                aria-controls="projects-dev"
               >
                 Development
               </button>
               <button
                 className={`tab-btn ${activeTab === "design" ? "active" : ""}`}
-                onClick={(e) => switchTab("design", e.target)}
+                onClick={() => setActiveTab("design")}
+                aria-pressed={activeTab === "design"}
+                aria-controls="projects-design"
               >
                 Design
               </button>
             </div>
           </div>
-          <div className="projects-grid" id="projects-grid" ref={projectsGridRef}></div>
+          <ProjectGrid id="projects-dev" projects={devProjects} hidden={activeTab !== "dev"} />
+          <ProjectGrid id="projects-design" projects={designProjects} hidden={activeTab !== "design"} />
         </div>
 
         {/* CERTIFICATES */}
@@ -477,7 +269,16 @@ export default function HomeClient() {
               expertise in the field.
             </p>
           </div>
-          <div className="certs-grid" id="certs-grid" ref={certsGridRef}></div>
+          <div className="certs-grid" id="certs-grid">
+            {certs.map((cert) => (
+              <article className="cert-card reveal" key={cert.name}>
+                <img className="cert-img" src={cert.img} alt={cert.issuer + " logo"} width="80" height="80" loading="lazy" decoding="async" onError={(event) => { event.currentTarget.style.visibility = "hidden"; }} />
+                <h3 className="cert-name">{cert.name}</h3>
+                <div className="cert-issuer">{cert.issuer}</div>
+                <div className="cert-date">{cert.date}</div>
+              </article>
+            ))}
+          </div>
         </div>
 
         {/* CONTACT */}
@@ -519,7 +320,7 @@ export default function HomeClient() {
             Source.
           </a>
         </span>
-      </div>
+      </main>
 
       <NavigationDock activePage="home" onHomeClick={scrollToTop} />
 

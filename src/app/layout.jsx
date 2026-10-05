@@ -1,47 +1,20 @@
 import "./globals.css";
+import Script from "next/script";
+import PageSwitcher from "@/components/PageSwitcher";
 import { seoKeywords } from "./seo";
-import Script from 'next/script'                          
-
+import { homeTitle, homeDescription, pageMetadata, siteUrl, structuredData } from "@/lib/site";
 
 export const metadata = {
-
-   icons: {
-    icon: [
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
-      { url: "/favicon-64x64.png", sizes: "64x64", type: "image/png" },
-    ],
+  ...pageMetadata(homeTitle, homeDescription, "/"),
+  metadataBase: new URL(siteUrl),
+  keywords: seoKeywords,
+  authors: [{ name: "Sophia Keziah", url: siteUrl }],
+  creator: "Sophia Keziah",
+  icons: {
+    icon: [16, 32, 48, 64].map((size) => ({ url: `/favicon-${size}x${size}.png`, sizes: `${size}x${size}`, type: "image/png" })),
     apple: "/apple-touch-icon.png",
   },
-  
-  keywords: seoKeywords,
-  title: "Ziah | Software Developer & CS Student",
-  description:
-    "Portfolio of Sophia Keziah (Ziah) — CS student, data nerd, and developer based in Pampanga, PH. Specializing in building SaaS products, web apps, and data-driven tools.",
-  
-  authors: [{ name: "Sophia Keziah", url: "https://ziiah.net" }],
-  creator: "Sophia Keziah",
-  openGraph: {
-    title: "Ziah | Software Developer & CS Student",
-    description:
-      "CS student, data nerd, and developer based in Pampanga, PH. Building SaaS products, web apps, and data tools.",
-    url: "https://ziiah.net",
-    siteName: "ziiahcodes",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: "Ziah | Software Developer",
-    description: "CS student and developer based in Pampanga, PH.",
-    creator: "@sphy.keziah",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  metadataBase: new URL("https://ziiah.net"),
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
 };
 
 export default function RootLayout({ children }) {
@@ -50,20 +23,15 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />        
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-        />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
       </head>
       <body>
-
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-C46WKGX5LY"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <a className="skip-link" href="#main-content">Skip to content</a>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
+        {children}
+        <PageSwitcher />
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -71,8 +39,7 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-C46WKGX5LY');
           `}
         </Script>
-
-        {children}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-C46WKGX5LY" strategy="lazyOnload" />
       </body>
     </html>
   );

@@ -1,10 +1,11 @@
 import MiscClient from "@/components/MiscClient";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata = {
-  title: "Ziiah | Misc",
-  description:
-    "A bento-style miscellaneous page — music taste, photo stack, gear, and more from Sophia Keziah.",
-};
+export const metadata = pageMetadata(
+  "Ziiah | Misc",
+  "Explore Sophia Keziah's music, photo collection, favorite apps, and personal interests. The miscellaneous corner of Ziah's portfolio.",
+  "/misc/",
+);
 
 export default function MiscPage() {
   return <MiscClient />;
